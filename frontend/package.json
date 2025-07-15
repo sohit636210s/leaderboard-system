@@ -16,7 +16,11 @@
     "web-vitals": "^2.1.4"
   },
   
+<<<<<<< HEAD
   "proxy": "https://leaderboard-system-vsj9.onrender.com",
+=======
+  "proxy": "https://leaderboard-backend.onrender.com",
+>>>>>>> 589f5d9d03eab89bea4cc3649700974fef1977d5
 
   "scripts": {
     "start": "react-scripts start",
