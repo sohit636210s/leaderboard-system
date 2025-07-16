@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// ✅ Define BASE_URL for deployed backend
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 /**
  * Component for displaying a dropdown to select existing users.
  * Also allows adding a new user using an input field.
@@ -10,17 +13,17 @@ function UserDropdown({ onUserSelect, selectedUserId }) {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState('');
 
-  // Fetch users when component loads
+  // ✅ Fetch users from deployed backend
   useEffect(() => {
-    axios.get('/api/users')
+    axios.get(`${BASE_URL}/api/users`)
       .then(res => setUsers(res.data))
       .catch(err => console.error('Error fetching users:', err));
   }, []);
 
-  // Add new user to database
+  // ✅ Add new user to backend database
   const handleAddUser = () => {
     if (newUser.trim() === '') return;
-    axios.post('/api/addUser', { name: newUser })
+    axios.post(`${BASE_URL}/api/addUser`, { name: newUser })
       .then(res => {
         setUsers(prev => [res.data.user, ...prev]);
         setNewUser('');

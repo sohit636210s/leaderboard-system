@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// ⭐ Define BASE_URL for deployed backend
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 function Leaderboard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/leaderboard')
+    // ⭐ Use full backend URL for Netlify compatibility
+    axios.get(`${BASE_URL}/api/leaderboard`)
       .then(res => setData(res.data))
-      .catch(err => console.error('Error fetching leaderboard:', err));
+      .catch(err => {
+        console.error('Error fetching leaderboard:', err);
+        // ⭐ Optional alert for feedback
+        alert('Unable to load leaderboard. Please try again later.');
+      });
   }, []);
 
   const maskId = (id) => {

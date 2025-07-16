@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// ⭐ Define BASE_URL for deployed backend
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 function ClaimHistory() {
   const [claims, setClaims] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/claims')
+    // ⭐ Updated to use full backend URL
+    axios.get(`${BASE_URL}/api/claims`)
       .then(res => setClaims(res.data))
-      .catch(err => console.error('Error fetching claim history:', err));
+      .catch(err => {
+        console.error('Error fetching claim history:', err);
+        alert('Failed to load claim history.');
+      });
   }, []);
 
   // Format timestamp
