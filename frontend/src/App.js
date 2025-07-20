@@ -1,63 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import LoginPage from './components/LoginPage';
+import SignupPage from './components/SignupPage';
+import ContactPage from './components/ContactPage';
+import AboutPage from './components/AboutPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-// Importing core UI components
-import UserDropdown from './components/UserDropdown';
-import ClaimButton from './components/ClaimButton';
-import Leaderboard from './components/Leaderboard';
-import ClaimHistory from './components/ClaimHistory'; // For displaying claim logs
 
-/**
- * Main App component — handles global state and renders all core sections:
- * - User selection and creation
- * - Claiming points for selected user
- * - Displaying leaderboard and claim history
- */
 function App() {
-  // Stores the selected user's MongoDB ID
-  const [selectedUserId, setSelectedUserId] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Triggers component re-render when user claims points
-  const [refresh, setRefresh] = useState(false);
+  useEffect(() => {
+    // Session check from localStorage
+    const token = localStorage.getItem('authToken');
+    if (token) setIsLoggedIn(true);
+  }, []);
 
-  // Called after claim to refresh leaderboard and claim history
-  const handleClaimComplete = () => {
-    setRefresh(prev => !prev); // Toggles state to re-render dependent components
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
   };
 
   return (
-    <>
-      {/* Top navbar with app branding */}
-      <nav className="navbar navbar-dark bg-primary mb-4">
-        <div className="container-fluid justify-content-center">
-          <span className="navbar-brand mb-0 h1">Leaderboard System</span>
+    <Router>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <Link className="navbar-brand" to="/">Carpenter Portal</Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navMenu">
+          <ul className="navbar-nav me-auto">
+            <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/about">About</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/booking">Booking</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/contact">Contact Us</Link></li>
+          </ul>
+          <div className="d-flex">
+            {isLoggedIn ? (
+              <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-outline-light navbar-btn">Login</Link>
+                <Link to="/signup" className="btn btn-success navbar-btn">Signup</Link>
+              </>
+            )}
+          </div>
         </div>
       </nav>
 
-      <div className="container my-4">
-        {/* Page heading with icon */}
-        <h2 className="text-center mb-4">
-          <i className="bi bi-lightning-charge-fill text-warning"></i> CARPENTER WORK
-        </h2>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/contact" element={<ContactPage />} />  
+        <Route path="/about" element={<AboutPage />} />
 
-        {/* Dropdown for selecting existing users and adding new ones */}
-        <UserDropdown
-          onUserSelect={setSelectedUserId}
-          selectedUserId={selectedUserId}
-        />
-
-        {/* Button to claim random points for selected user */}
-        <ClaimButton
-          selectedUserId={selectedUserId}
-          onClaimComplete={handleClaimComplete}
-        />
-
-        {/* Display leaderboard — shows sorted users by points */}
-        <Leaderboard key={refresh} />
-
-        {/* Display recent claim history — shows timestamped point claims */}
-        <ClaimHistory key={`claim-${refresh}`} />
-      </div>
-    </>
+      </Routes>
+    </Router>
   );
 }
 
