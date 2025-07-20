@@ -36,7 +36,7 @@ function App() {
       <div className="container my-4">
         {/* Page heading with icon */}
         <h2 className="text-center mb-4">
-          <i className="bi bi-lightning-charge-fill text-warning"></i> Leaderboard Challenge
+          <i className="bi bi-lightning-charge-fill text-warning"></i> CARPENTER WORK
         </h2>
 
         {/* Dropdown for selecting existing users and adding new ones */}
