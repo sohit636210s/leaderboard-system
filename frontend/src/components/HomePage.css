@@ -1,6 +1,7 @@
 .hero-section {
   min-height: 90vh;
-  background-image: url('C:\Users\mohit\OneDrive\Desktop\REACT-PROJECT\leaderboard-app\frontend\public\images/carpenter.jpg'); /* Replace with your preferred image */
+  background-image: url('/images/carpenter.jpg'); /* ✅ relative path from public folder */
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
