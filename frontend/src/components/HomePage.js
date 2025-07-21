@@ -1,12 +1,24 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import './HomePage.css'; // Custom CSS for background image
+// ❌ Removed carpenterImage import — not needed from public
+// ❌ Removed './HomePage.css' — not needed as CSS file was deleted
 
 function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <div className="hero-section text-white d-flex align-items-center">
+      {/* ✅ Hero Section — Inline Background Style from public/images */}
+      <div
+        className="text-white d-flex align-items-center"
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL + '/images/carpenter.jpg'})`, // ✅ Correct way to reference public image
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '90vh',
+          paddingTop: '80px',
+          paddingBottom: '80px',
+        }}
+      >
         <Container>
           <Row className="justify-content-center text-center">
             <Col md={8}>
