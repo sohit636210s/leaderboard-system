@@ -8,12 +8,11 @@ import AboutPage from './components/AboutPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-function App() {
+function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); // ✅ ESLint-safe usage
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Session check from localStorage
     const token = localStorage.getItem('authToken');
     if (token) setIsLoggedIn(true);
   }, []);
@@ -21,7 +20,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     setIsLoggedIn(false);
-    navigate('/login'); // ✅ redirect after logout
+    navigate('/login');
   };
 
   return (
@@ -44,8 +43,8 @@ function App() {
               <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
             ) : (
               <>
-                <Link to="/login" className="btn btn-outline-light navbar-btn">Login</Link>
-                <Link to="/signup" className="btn btn-success navbar-btn">Signup</Link>
+                <Link to="/login" className="btn btn-outline-light me-2">Login</Link>
+                <Link to="/signup" className="btn btn-success">Signup</Link>
               </>
             )}
           </div>
@@ -56,10 +55,18 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/contact" element={<ContactPage />} />  
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
       </Routes>
     </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
