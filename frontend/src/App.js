@@ -8,9 +8,9 @@ import AboutPage from './components/AboutPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate(); // ✅ ESLint-safe usage
 
   useEffect(() => {
     // Session check from localStorage
@@ -21,10 +21,11 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     setIsLoggedIn(false);
+    navigate('/login'); // ✅ redirect after logout
   };
 
   return (
-    <Router>
+    <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
         <Link className="navbar-brand" to="/">Carpenter Portal</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -57,9 +58,8 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/contact" element={<ContactPage />} />  
         <Route path="/about" element={<AboutPage />} />
-
       </Routes>
-    </Router>
+    </>
   );
 }
 
