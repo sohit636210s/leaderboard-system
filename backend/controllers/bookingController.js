@@ -23,3 +23,13 @@ exports.createBooking = async (req, res) => {
     matchedWorker: availableWorker || 'No worker available nearby',
   });
 };
+
+// 👇 Yeh function bahar hona chahiye
+exports.listBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate('matchedWorker');
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+};
