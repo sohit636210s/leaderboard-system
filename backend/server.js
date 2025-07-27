@@ -21,6 +21,11 @@ app.use('/api/bookings', bookingRoutes);      // 🔨 Booking APIs
 app.use('/api/workers', workerRoutes);        // 👷 Worker APIs
 app.use('/api/customers', customerRoutes);    // 🧑‍💼 Customer APIs
 
+// 🚪 Root route — for browser or Render base URL test
+app.get('/', (req, res) => {
+  res.send('🎯 Backend Kaamwallah Server is Running');
+});
+
 // 🧩 MongoDB se connect karna (Atlas via .env)
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
