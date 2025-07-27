@@ -23,7 +23,11 @@ function BookingForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/bookings/book', formData);
+      // ✅ UPDATED: Using Render backend URL
+      const res = await axios.post(
+        'https://leaderboard-system-vsj9.onrender.com/api/bookings/book',
+        formData
+      );
       setMatchedWorker(res.data.matchedWorker);
     } catch (err) {
       console.error('Booking failed:', err.message);
@@ -62,13 +66,12 @@ function BookingForm() {
           Book a Carpenter
         </h3>
         <form onSubmit={handleSubmit}>
+          {/* Input Fields */}
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="customerName">
-              <i className="bi bi-person-fill me-1" style={{ color: '#198754' }}></i>
-              Name
+            <label htmlFor="customerName" className="form-label fw-semibold">
+              <i className="bi bi-person-fill me-1" style={{ color: '#198754' }}></i> Name
             </label>
             <input
-              id="customerName"
               type="text"
               name="customerName"
               value={formData.customerName}
@@ -78,13 +81,12 @@ function BookingForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="address">
-              <i className="bi bi-geo-alt-fill me-1" style={{ color: '#dc3545' }}></i>
-              Address
+            <label htmlFor="address" className="form-label fw-semibold">
+              <i className="bi bi-geo-alt-fill me-1" style={{ color: '#dc3545' }}></i> Address
             </label>
             <input
-              id="address"
               type="text"
               name="address"
               value={formData.address}
@@ -94,13 +96,12 @@ function BookingForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="city">
-              <i className="bi bi-building me-1" style={{ color: '#0d6efd' }}></i>
-              City
+            <label htmlFor="city" className="form-label fw-semibold">
+              <i className="bi bi-building me-1" style={{ color: '#0d6efd' }}></i> City
             </label>
             <input
-              id="city"
               type="text"
               name="city"
               value={formData.city}
@@ -110,13 +111,12 @@ function BookingForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="pincode">
-              <i className="bi bi-pin-map-fill me-1" style={{ color: '#ffc107' }}></i>
-              Pincode
+            <label htmlFor="pincode" className="form-label fw-semibold">
+              <i className="bi bi-pin-map-fill me-1" style={{ color: '#ffc107' }}></i> Pincode
             </label>
             <input
-              id="pincode"
               type="text"
               name="pincode"
               value={formData.pincode}
@@ -126,13 +126,12 @@ function BookingForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="contact">
-              <i className="bi bi-telephone-fill me-1" style={{ color: '#198754' }}></i>
-              Contact
+            <label htmlFor="contact" className="form-label fw-semibold">
+              <i className="bi bi-telephone-fill me-1" style={{ color: '#198754' }}></i> Contact
             </label>
             <input
-              id="contact"
               type="text"
               name="contact"
               value={formData.contact}
@@ -142,13 +141,12 @@ function BookingForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label className="form-label fw-semibold" htmlFor="jobDescription">
-              <i className="bi bi-tools me-1" style={{ color: '#dc3545' }}></i>
-              Job Description
+            <label htmlFor="jobDescription" className="form-label fw-semibold">
+              <i className="bi bi-tools me-1" style={{ color: '#dc3545' }}></i> Job Description
             </label>
             <textarea
-              id="jobDescription"
               name="jobDescription"
               value={formData.jobDescription}
               onChange={handleChange}
@@ -158,6 +156,8 @@ function BookingForm() {
               required
             />
           </div>
+
+          {/* Submit Button */}
           <button
             className="btn w-100 fw-bold"
             style={{
@@ -174,6 +174,7 @@ function BookingForm() {
           </button>
         </form>
 
+        {/* Booking Match Result */}
         {matchedWorker && (
           <div className="mt-4 alert alert-success">
             <h5>
