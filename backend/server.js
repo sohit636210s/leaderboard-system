@@ -1,42 +1,33 @@
+// 🛠️ Express aur Mongoose import karna
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 
-// Load environment variables from .env file
+// 📦 dotenv ke through env file load karna
+const dotenv = require('dotenv');
 dotenv.config();
 
-// Connect to MongoDB database
-connectDB();
-
+// 🚀 Express app initialize karna
 const app = express();
 
-// Enable CORS for frontend/backend communication
-app.use(cors());
-
-// Parse incoming JSON payloads
+// 📨 JSON request body ko parse karna
 app.use(express.json());
 
-// ================== ROUTE IMPORTS ==================
+// 🛣️ Routes connect karna (Booking, Worker, Customer APIs)
+const bookingRoutes = require('./routes/bookingRoutes');
+const workerRoutes = require('./routes/workerRoutes');
+const customerRoutes = require('./routes/customerRoutes');
 
-// Routes for user operations (create, fetch)
-const userRoutes = require('./routes/userRoutes');
+app.use('/api/bookings', bookingRoutes);      // 🔨 Booking APIs
+app.use('/api/workers', workerRoutes);        // 👷 Worker APIs
+app.use('/api/customers', customerRoutes);    // 🧑‍💼 Customer APIs
 
-// Routes for claim operations (claim points, leaderboard, history)
-const claimRoutes = require('./routes/claimRoutes');
+// 🧩 MongoDB se connect karna (Atlas via .env)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => console.error('❌ MongoDB Error:', err));
 
-// ================== ROUTE MOUNTING ==================
-
-// All routes prefixed with /api for consistency
-app.use('/api', userRoutes);
-app.use('/api', claimRoutes);
-
-// Health check endpoint (optional)
-app.get('/', (req, res) => res.send('API is running successfully'));
-
-// ================== SERVER START ==================
-
+// 🔊 Server ko local port pe run karna
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server started on port ${PORT}`);
+  console.log(`🔃 Server running on port ${PORT}`);
 });
