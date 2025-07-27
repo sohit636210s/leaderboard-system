@@ -13,7 +13,6 @@ function BookingForm() {
 
   const [matchedWorker, setMatchedWorker] = useState(null);
 
-  // 🔄 Input field update handler
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
@@ -21,12 +20,11 @@ function BookingForm() {
     }));
   };
 
-  // 🚀 Submit booking to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/bookings/book', formData);
-      setMatchedWorker(res.data.matchedWorker); // 🔍 matched worker mil gaya
+      setMatchedWorker(res.data.matchedWorker);
     } catch (err) {
       console.error('Booking failed:', err.message);
       alert('Booking request failed. Check console for details.');
@@ -34,33 +32,161 @@ function BookingForm() {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-3">Book a Carpenter</h2>
-      <form onSubmit={handleSubmit}>
-        {['customerName', 'address', 'city', 'pincode', 'contact', 'jobDescription'].map(field => (
-          <input
-            key={field}
-            type="text"
-            name={field}
-            value={formData[field]}
-            onChange={handleChange}
-            placeholder={field.replace(/([A-Z])/g, ' $1')}
-            className="form-control mb-2"
-            required
+    <div className="container mt-5 d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <div
+        className="card shadow-lg p-4 w-100"
+        style={{
+          maxWidth: 480,
+          borderRadius: '18px',
+          border: '3px solid',
+          borderImage: 'linear-gradient(90deg, #198754 60%, #ffc107 100%) 1',
+          background: 'linear-gradient(120deg, #f8f9fa 80%, #e9ecef 100%)'
+        }}
+      >
+        <div className="text-center mb-4">
+          <img
+            src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=80&q=80"
+            alt="Carpenter Booking"
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              border: '2px solid #198754',
+              boxShadow: '0 2px 8px rgba(25,135,84,0.15)',
+              objectFit: 'cover',
+            }}
           />
-        ))}
-        <button className="btn btn-success">Submit Booking</button>
-      </form>
-
-      {matchedWorker && (
-        <div className="mt-4 alert alert-info">
-          <h5>📍 Nearest Worker Found:</h5>
-          <p><strong>Name:</strong> {matchedWorker.name}</p>
-          <p><strong>City:</strong> {matchedWorker.city}</p>
-          <p><strong>Pincode:</strong> {matchedWorker.pincode}</p>
-          <p><strong>Contact:</strong> {matchedWorker.contact}</p>
         </div>
-      )}
+        <h3 className="text-center mb-3 fw-bold" style={{ color: '#198754' }}>
+          <i className="bi bi-calendar-check-fill me-2" style={{ color: '#ffc107', fontSize: '1.5rem', verticalAlign: 'middle' }}></i>
+          Book a Carpenter
+        </h3>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="customerName">
+              <i className="bi bi-person-fill me-1" style={{ color: '#198754' }}></i>
+              Name
+            </label>
+            <input
+              id="customerName"
+              type="text"
+              name="customerName"
+              value={formData.customerName}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="address">
+              <i className="bi bi-geo-alt-fill me-1" style={{ color: '#dc3545' }}></i>
+              Address
+            </label>
+            <input
+              id="address"
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your address"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="city">
+              <i className="bi bi-building me-1" style={{ color: '#0d6efd' }}></i>
+              City
+            </label>
+            <input
+              id="city"
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your city"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="pincode">
+              <i className="bi bi-pin-map-fill me-1" style={{ color: '#ffc107' }}></i>
+              Pincode
+            </label>
+            <input
+              id="pincode"
+              type="text"
+              name="pincode"
+              value={formData.pincode}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your pincode"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="contact">
+              <i className="bi bi-telephone-fill me-1" style={{ color: '#198754' }}></i>
+              Contact
+            </label>
+            <input
+              id="contact"
+              type="text"
+              name="contact"
+              value={formData.contact}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter your contact number"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="jobDescription">
+              <i className="bi bi-tools me-1" style={{ color: '#dc3545' }}></i>
+              Job Description
+            </label>
+            <textarea
+              id="jobDescription"
+              name="jobDescription"
+              value={formData.jobDescription}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Describe your carpentry job"
+              rows={3}
+              required
+            />
+          </div>
+          <button
+            className="btn w-100 fw-bold"
+            style={{
+              background: 'linear-gradient(90deg, #198754 60%, #ffc107 100%)',
+              color: '#fff',
+              borderRadius: '8px',
+              fontSize: '1.1rem',
+              border: 'none',
+              boxShadow: '0 2px 8px rgba(25,135,84,0.15)'
+            }}
+          >
+            <i className="bi bi-send-check me-2"></i>
+            Submit Booking
+          </button>
+        </form>
+
+        {matchedWorker && (
+          <div className="mt-4 alert alert-success">
+            <h5>
+              <i className="bi bi-person-check-fill me-2" style={{ color: '#198754' }}></i>
+              Nearest Worker Found:
+            </h5>
+            <p><strong>Name:</strong> {matchedWorker.name}</p>
+            <p><strong>City:</strong> {matchedWorker.city}</p>
+            <p><strong>Pincode:</strong> {matchedWorker.pincode}</p>
+            <p><strong>Contact:</strong> {matchedWorker.contact}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
