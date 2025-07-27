@@ -6,8 +6,14 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
+// 🔓 CORS enable karna (👇 This solves your deployment issue!)
+const cors = require('cors');
+
 // 🚀 Express app initialize karna
 const app = express();
+
+// 🔓 Cross-Origin requests ko allow karna (Netlify → Render)
+app.use(cors());
 
 // 📨 JSON request body ko parse karna
 app.use(express.json());
