@@ -11,6 +11,7 @@ import WorkerLogin from './components/WorkerLogin';
 import CustomerLogin from './components/CustomerLogin';
 import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
+import AdminBookingList from './components/AdminBookingList'; // 👈 NEW
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -33,7 +34,7 @@ function AppContent() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4" style={{ borderBottom: '2px solid #0d6efd' }}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top" style={{ borderBottom: '2px solid #0d6efd', zIndex: 1050 }}>
         <Link className="navbar-brand d-flex align-items-center" to="/">
           <img
             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=60&q=80"
@@ -72,6 +73,12 @@ function AppContent() {
                 Contact Us
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link d-flex align-items-center" to="/admin/bookings">
+                <i className="bi bi-journal-text me-1" style={{ color: '#0d6efd', fontSize: '1.2rem' }}></i>
+                All Bookings
+              </Link>
+            </li>
           </ul>
           <div className="d-flex">
             {isLoggedIn ? (
@@ -81,7 +88,6 @@ function AppContent() {
               </>
             ) : (
               <>
-                {/* Login button opens modal */}
                 <button
                   className="btn btn-outline-light me-2"
                   onClick={() => setShowLoginModal(true)}
@@ -107,7 +113,6 @@ function AppContent() {
                 <button type="button" className="btn-close" onClick={() => setShowLoginModal(false)}></button>
               </div>
               <div className="modal-body">
-                {/* Yahan sirf aapka LoginPage component render ho raha hai */}
                 <LoginPage setIsLoggedIn={setIsLoggedIn} />
               </div>
             </div>
@@ -115,19 +120,23 @@ function AppContent() {
         </div>
       )}
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/booking" element={<BookingForm />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/admin/customers" element={<AdminCustomerList />} />
-        <Route path="/signup" element={<SignupSelector />} />
-        <Route path="/worker-signup" element={<WorkerSignup />} />
-        <Route path="/customer-signup" element={<CustomerSignup />} />
-        <Route path="/worker-login" element={<WorkerLogin />} />
-        <Route path="/customer-login" element={<CustomerLogin />} />
-        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-      </Routes>
+      {/* Add padding so content is not hidden behind navbar */}
+      <div style={{ paddingTop: '70px' }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/booking" element={<BookingForm />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/admin/customers" element={<AdminCustomerList />} />
+          <Route path="/admin/bookings" element={<AdminBookingList />} /> {/* 👈 NEW */}
+          <Route path="/signup" element={<SignupSelector />} />
+          <Route path="/worker-signup" element={<WorkerSignup />} />
+          <Route path="/customer-signup" element={<CustomerSignup />} />
+          <Route path="/worker-login" element={<WorkerLogin />} />
+          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+        </Routes>
+      </div>
     </>
   );
 }
