@@ -8,15 +8,16 @@ function LoginPage({ setIsLoggedIn }) {
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
+  // ✅ Handler called on form submit — no direct button click
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ Prevent page refresh
-    setErrorMsg('');    // Clear previous error
+    e.preventDefault(); // Prevent page refresh
+    setErrorMsg(''); // Clear previous error
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/worker/login`, {
-        email,
-        password: pass,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/worker/login`,
+        { email, password: pass }
+      );
 
       const { token, worker, message } = res?.data || {};
 
@@ -45,7 +46,7 @@ function LoginPage({ setIsLoggedIn }) {
           borderImage: 'linear-gradient(90deg, #198754 60%, #dc3545 100%) 1',
         }}
       >
-        {/* 🔴 Error Message */}
+        {/* ✅ Error clearly shown before form */}
         {errorMsg && (
           <div className="text-danger fw-semibold mb-3 text-center" style={{ fontSize: '0.95rem' }}>
             {errorMsg}
@@ -69,11 +70,10 @@ function LoginPage({ setIsLoggedIn }) {
         </div>
 
         <h4 className="text-center mb-4 fw-bold" style={{ color: '#198754' }}>
-          <i className="bi bi-person-badge" style={{ color: '#dc3545', fontSize: '1.5rem', verticalAlign: 'middle' }}></i>{' '}
-          Login for Worker
+          <i className="bi bi-person-badge" style={{ color: '#dc3545', fontSize: '1.5rem' }}></i> Login for Worker
         </h4>
 
-        {/* 📝 Form Start */}
+        {/* ✅ Fixed: Form added to wrap inputs properly */}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label fw-semibold" htmlFor="email">Email Address</label>
@@ -128,7 +128,6 @@ function LoginPage({ setIsLoggedIn }) {
             <i className="bi bi-box-arrow-in-right me-2"></i>Login
           </button>
         </form>
-        {/* 📝 Form End */}
 
         <div className="text-center mt-3">
           <span className="text-muted">Not registered?</span>{' '}
