@@ -3,38 +3,102 @@ import axios from 'axios';
 
 function WorkerSignup() {
   const [formData, setFormData] = useState({
-    name: '', skill: '', city: '', pincode: '', contact: ''
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    contact: '',
+    address: '',
+    pincode: '',
+    skill: '',
+    photo: null,
   });
 
-  const handleChange = e => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'photo') {
+      setFormData(prev => ({ ...prev, photo: files[0] }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    const payload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      payload.append(key, value);
+    });
+
     try {
-      await axios.post('http://localhost:5000/api/workers/register', formData);
-      alert('Worker registered successfully!');
+      const backendURL = process.env.REACT_APP_BACKEND_URL;
+      await axios.post(`${backendURL}/api/workers/register`, payload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      alert('✅ Worker registered successfully!');
+      // redirect or modal here
     } catch (err) {
-      alert('Error during registration');
+      alert('❌ Error during registration');
       console.error(err);
     }
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: 'auto', marginTop: '50px', border: '2px solid #e91e63', padding: 25, borderRadius: 12 }}>
-      <h3 className="text-center mb-4">👷 काम करने वाला (Worker) रजिस्ट्रेशन</h3>
+    <div style={{
+      maxWidth: 500, margin: 'auto', marginTop: '50px',
+      border: '2px solid #e91e63', padding: 25, borderRadius: 12,
+      background: '#fdf4f9' // 🎨 Light theme you can brand later
+    }}>
+      <h3 className="text-center mb-4 text-danger fw-bold">
+        👷 काम करने वाला रजिस्ट्रेशन (Worker Signup)
+      </h3>
       <form onSubmit={handleSubmit}>
-        {['name', 'skill', 'city', 'pincode', 'contact'].map(field => (
+        {[
+          { name: 'name', placeholder: 'Full Name' },
+          { name: 'email', placeholder: 'Email Address', type: 'email' },
+          { name: 'password', placeholder: 'Password', type: 'password' },
+          { name: 'confirmPassword', placeholder: 'Confirm Password', type: 'password' },
+          { name: 'contact', placeholder: 'Mobile Number' },
+          { name: 'address', placeholder: 'Full Address' },
+          { name: 'pincode', placeholder: 'Area Pincode' },
+          { name: 'skill', placeholder: 'Skill (e.g. Carpenter)' }
+        ].map(({ name, placeholder, type = 'text' }) => (
           <input
-            key={field} name={field} value={formData[field]}
+            key={name}
+            name={name}
+            type={type}
+            value={formData[name]}
             onChange={handleChange}
-            placeholder={field.toUpperCase()}
+            placeholder={placeholder}
             className="form-control mb-3"
-            style={{ border: '1.5px solid #e91e63' }} required
+            style={{ border: '1.5px solid #e91e63' }}
+            required
           />
         ))}
-        <button className="btn btn-primary w-100">Register</button>
+
+        {/* 🖼️ Photo Upload */}
+        <div className="mb-3">
+          <label className="form-label fw-semibold">Upload Profile Photo:</label>
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            onChange={handleChange}
+            className="form-control"
+            style={{ border: '1.5px solid #e91e63' }}
+            required
+          />
+        </div>
+
+        <button className="btn btn-danger w-100 fw-bold">
+          <i className="bi bi-person-plus me-2"></i> Register
+        </button>
       </form>
     </div>
   );
