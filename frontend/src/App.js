@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -15,31 +13,40 @@ import CustomerLogin from './components/CustomerLogin';
 import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
+import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [worker, setWorker] = useState(null); // 👈 to customize Navbar if needed
+  const [worker, setWorker] = useState(null); // ✅ To customize Navbar + pass to dashboard
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    if (token) setIsLoggedIn(true);
+    if (token) {
+      setIsLoggedIn(true);
+      // 👇 Optional: restore worker info if needed from localStorage or API
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('workerToken'); // ✅ Clear worker token too
     setIsLoggedIn(false);
-    setWorker(null); // optional cleanup
+    setWorker(null); // ✅ Reset on logout
     navigate('/login');
   };
 
   return (
     <>
-      {/* Modular Navbar Component */}
-      <Navbar worker={worker} handleLogout={handleLogout} isLoggedIn={isLoggedIn} setShowLoginModal={setShowLoginModal} />
+      <Navbar
+        worker={worker}
+        handleLogout={handleLogout}
+        isLoggedIn={isLoggedIn}
+        setShowLoginModal={setShowLoginModal}
+      />
 
       {/* Login Modal */}
       {showLoginModal && (
@@ -69,9 +76,13 @@ function AppContent() {
           <Route path="/signup" element={<SignupSelector />} />
           <Route path="/worker-signup" element={<WorkerSignup />} />
           <Route path="/customer-signup" element={<CustomerSignup />} />
-          <Route path="/worker-login" element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />} />
+          <Route
+            path="/worker-login"
+            element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />}
+          />
           <Route path="/customer-login" element={<CustomerLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/worker-dashboard" element={<WorkerDashboard worker={worker} />} /> {/* ✅ Added route */}
         </Routes>
       </div>
     </>
