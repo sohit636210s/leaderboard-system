@@ -14,6 +14,9 @@ function BookingForm() {
   const [matchedWorker, setMatchedWorker] = useState(null);
   const [submissionMessage, setSubmissionMessage] = useState('');
 
+  // ✅ Backend URL from Netlify ENV
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
+
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
@@ -24,17 +27,14 @@ function BookingForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        'https://leaderboard-system-vsj9.onrender.com/api/bookings/book',
-        formData
-      );
+      const res = await axios.post(`${backendURL}/api/bookings/book`, formData);
 
       setMatchedWorker(res.data.matchedWorker);
-      setSubmissionMessage(res.data.matchedWorker
-        ? '✅ Booking submitted! Nearest worker found below.'
-        : '✅ Booking submitted, but no nearby worker is available.'
+      setSubmissionMessage(
+        res.data.matchedWorker
+          ? '✅ Booking submitted! Nearest worker found below.'
+          : '✅ Booking submitted, but no nearby worker is available.'
       );
-
     } catch (err) {
       console.error('Booking failed:', err.message);
       setSubmissionMessage('❌ Booking failed. Please try again later.');
@@ -169,16 +169,14 @@ function BookingForm() {
           }}>
             <i className="bi bi-send-check me-2"></i> Submit Booking
           </button>
-        </form>
+        </form>              
 
-        {/* ✅ Submission Message */}
         {submissionMessage && (
           <div className="mt-4 alert alert-info">
             {submissionMessage}
           </div>
         )}
 
-        {/* 👷 Worker Match Info */}
         {matchedWorker && (
           <div className="mt-2 alert alert-success">
             <h5>
