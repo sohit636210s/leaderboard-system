@@ -1,36 +1,69 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function WorkerLogin() {
-  const [formData, setFormData] = useState({ contact: '' });
+function WorkerLogin({ setWorker }) {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.get(`http://localhost:5000/api/workers/list`);
-      const match = res.data.find(w => w.contact === formData.contact);
-      if (match) {
-        alert(`Welcome worker: ${match.name}`);
-      } else {
-        alert('Worker not found!');
-      }
+      const backendURL = process.env.REACT_APP_BACKEND_URL;
+      const res = await axios.post(`${backendURL}/api/workers/login`, formData);
+
+      // ✅ Save token for session
+      localStorage.setItem('workerToken', res.data.token);
+      
+      // ✅ Update parent state (Navbar trigger)
+      setWorker(res.data.worker);
+
+      alert(`Welcome, ${res.data.worker.name}!`);
+
     } catch (err) {
-      alert('Login failed');
+      alert(err.response?.data?.error || 'Login failed');
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', marginTop: 60, border: '2px solid #e91e63', padding: 25, borderRadius: 12 }}>
-      <h4 className="text-center mb-3">👷 Worker Login</h4>
+    <div style={{
+      maxWidth: 420,
+      margin: 'auto',
+      marginTop: 60,
+      padding: 25,
+      border: '2px solid #4CAF50',
+      borderRadius: 12,
+      background: '#f3fff3',
+    }}>
+      <h4 className="text-center mb-4 fw-bold text-success">👷 Worker Login</h4>
       <form onSubmit={handleSubmit}>
         <input
-          type="text" name="contact" value={formData.contact}
-          onChange={e => setFormData({ contact: e.target.value })}
-          placeholder="CONTACT NUMBER"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email Address"
           className="form-control mb-3"
-          style={{ border: '1.5px solid #e91e63' }} required
+          required
         />
-        <button className="btn btn-primary w-100">Login</button>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          className="form-control mb-4"
+          required
+        />
+        <button className="btn btn-success w-100 fw-bold">
+          <i className="bi bi-box-arrow-in-right me-2"></i> Login
+        </button>
       </form>
     </div>
   );
