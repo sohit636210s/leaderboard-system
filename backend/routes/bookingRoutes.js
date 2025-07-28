@@ -9,3 +9,5 @@ router.post('/book', createBooking);
 router.get('/list', listBookings);
 
 module.exports = router;
+
+

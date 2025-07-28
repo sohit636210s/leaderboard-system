@@ -5,14 +5,36 @@ const jwt = require('jsonwebtoken');
 // 📝 Register new worker
 exports.registerWorker = async (req, res) => {
   try {
-    const { name, email, password, contact, address, pincode, skill, photo } = req.body;
+    const { name, email, password, contact, address, pincode, skill } = req.body;
 
-    const worker = new Worker({ name, email, password, contact, address, pincode, skill, photo });
+    if (!name || !email || !password || !contact || !address || !pincode || !skill) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const existing = await Worker.findOne({ email });
+    if (existing) {
+      return res.status(409).json({ error: 'Email already registered' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const photoFile = req.file ? req.file.filename : null;
+
+    const worker = new Worker({
+      name,
+      email,
+      password: hashedPassword,
+      contact,
+      address,
+      pincode,
+      skill,
+      photo: photoFile
+    });
+
     await worker.save();
-
     res.status(201).json({ message: 'Worker registered successfully', worker });
   } catch (error) {
-    res.status(400).json({ error: 'Registration failed', details: error.message });
+    res.status(500).json({ error: 'Registration failed', details: error.message });
   }
 };
 
