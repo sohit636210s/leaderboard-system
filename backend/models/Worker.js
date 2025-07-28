@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const workerSchema = new mongoose.Schema({
   name: {
@@ -6,12 +7,25 @@ const workerSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  skill: {
+  email: {
     type: String,
     required: true,
-    enum: ['Carpenter', 'Electrician', 'Plumber', 'Painter', 'Other']
+    unique: true,
+    lowercase: true,
+    match: /^\S+@\S+\.\S+$/
   },
-  city: {
+  password: {
+    type: String,
+    required: true,
+    minlength: 6
+  },
+  contact: {
+    type: String,
+    required: true,
+    unique: true,
+    match: /^[6-9]\d{9}$/
+  },
+  address: {
     type: String,
     required: true,
     trim: true
@@ -21,20 +35,29 @@ const workerSchema = new mongoose.Schema({
     required: true,
     match: /^[1-9][0-9]{5}$/
   },
-  contact: {
+  city: {
+    type: String,
+    trim: true // optional in new flow
+  },
+  skill: {
     type: String,
     required: true,
-    unique: true,
-    match: /^[6-9]\d{9}$/
+    enum: ['Carpenter', 'Electrician', 'Plumber', 'Painter', 'Other']
+  },
+  photo: {
+    type: String // filename or image path
   },
   isAvailable: {
     type: Boolean,
     default: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
+}, { timestamps: true });
+
+// 🔐 Hash password before save
+workerSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 module.exports = mongoose.model('Worker', workerSchema);
