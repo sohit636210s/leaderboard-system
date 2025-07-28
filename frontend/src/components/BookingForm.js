@@ -4,17 +4,15 @@ import axios from 'axios';
 function BookingForm() {
   const [formData, setFormData] = useState({
     customerName: '',
-    address: '',
-    city: '',
-    pincode: '',
     contact: '',
+    address: '',
+    pincode: '',
     jobDescription: ''
   });
 
   const [matchedWorker, setMatchedWorker] = useState(null);
   const [submissionMessage, setSubmissionMessage] = useState('');
 
-  // ✅ Backend URL from Netlify ENV
   const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const handleChange = (e) => {
@@ -28,7 +26,6 @@ function BookingForm() {
     e.preventDefault();
     try {
       const res = await axios.post(`${backendURL}/api/bookings/book`, formData);
-
       setMatchedWorker(res.data.matchedWorker);
       setSubmissionMessage(
         res.data.matchedWorker
@@ -46,9 +43,8 @@ function BookingForm() {
       <div className="card shadow-lg p-4 w-100" style={{
         maxWidth: 480,
         borderRadius: '18px',
-        border: '3px solid',
-        borderImage: 'linear-gradient(90deg, #198754 60%, #ffc107 100%) 1',
-        background: 'linear-gradient(120deg, #f8f9fa 80%, #e9ecef 100%)'
+        border: '3px solid #dc3545',
+        background: 'linear-gradient(120deg, #f8f9fa 80%, #ffeaea 100%)'
       }}>
         <div className="text-center mb-4">
           <img
@@ -58,20 +54,21 @@ function BookingForm() {
               width: 60,
               height: 60,
               borderRadius: '50%',
-              border: '2px solid #198754',
-              boxShadow: '0 2px 8px rgba(25,135,84,0.15)',
+              border: '2px solid #dc3545',
+              boxShadow: '0 2px 8px rgba(220,53,69,0.2)',
               objectFit: 'cover',
             }}
           />
         </div>
-        <h3 className="text-center mb-3 fw-bold" style={{ color: '#198754' }}>
-          <i className="bi bi-calendar-check-fill me-2" style={{ color: '#ffc107', fontSize: '1.5rem' }}></i>
+        <h3 className="text-center mb-3 fw-bold" style={{ color: '#dc3545' }}>
+          <i className="bi bi-hammer me-2" style={{ fontSize: '1.5rem' }}></i>
           Book a Carpenter
         </h3>
         <form onSubmit={handleSubmit}>
+          {/* 👤 Name */}
           <div className="mb-3">
             <label className="form-label fw-semibold">
-              <i className="bi bi-person-fill me-1" style={{ color: '#198754' }}></i> Name
+              <i className="bi bi-person-fill me-1" style={{ color: '#dc3545' }}></i> Name
             </label>
             <input
               type="text"
@@ -79,11 +76,36 @@ function BookingForm() {
               value={formData.customerName}
               onChange={handleChange}
               className="form-control"
+              style={{
+                border: '2px solid #dc3545',
+                boxShadow: '0 0 5px rgba(220,53,69,0.3)'
+              }}
               placeholder="Enter your name"
               required
             />
           </div>
 
+          {/* 📱 Contact */}
+          <div className="mb-3">
+            <label className="form-label fw-semibold">
+              <i className="bi bi-phone-fill me-1" style={{ color: '#dc3545' }}></i> Contact
+            </label>
+            <input
+              type="text"
+              name="contact"
+              value={formData.contact}
+              onChange={handleChange}
+              className="form-control"
+              style={{
+                border: '2px solid #dc3545',
+                boxShadow: '0 0 5px rgba(220,53,69,0.3)'
+              }}
+              placeholder="Enter your mobile number"
+              required
+            />
+          </div>
+
+          {/* 🏠 Address */}
           <div className="mb-3">
             <label className="form-label fw-semibold">
               <i className="bi bi-geo-alt-fill me-1" style={{ color: '#dc3545' }}></i> Address
@@ -94,29 +116,19 @@ function BookingForm() {
               value={formData.address}
               onChange={handleChange}
               className="form-control"
+              style={{
+                border: '2px solid #dc3545',
+                boxShadow: '0 0 5px rgba(220,53,69,0.3)'
+              }}
               placeholder="Enter your address"
               required
             />
           </div>
 
+          {/* 📮 Pincode */}
           <div className="mb-3">
             <label className="form-label fw-semibold">
-              <i className="bi bi-building me-1" style={{ color: '#0d6efd' }}></i> City
-            </label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Enter your city"
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label fw-semibold">
-              <i className="bi bi-pin-map-fill me-1" style={{ color: '#ffc107' }}></i> Pincode
+              <i className="bi bi-pin-map-fill me-1" style={{ color: '#dc3545' }}></i> Pincode
             </label>
             <input
               type="text"
@@ -124,26 +136,16 @@ function BookingForm() {
               value={formData.pincode}
               onChange={handleChange}
               className="form-control"
-              placeholder="Enter your pincode"
+              style={{
+                border: '2px solid #dc3545',
+                boxShadow: '0 0 5px rgba(220,53,69,0.3)'
+              }}
+              placeholder="Enter your area pincode"
               required
             />
           </div>
 
-          <div className="mb-3">
-            <label className="form-label fw-semibold">
-              <i className="bi bi-telephone-fill me-1" style={{ color: '#198754' }}></i> Contact
-            </label>
-            <input
-              type="text"
-              name="contact"
-              value={formData.contact}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Enter your contact number"
-              required
-            />
-          </div>
-
+          {/* 🔨 Job Description */}
           <div className="mb-3">
             <label className="form-label fw-semibold">
               <i className="bi bi-tools me-1" style={{ color: '#dc3545' }}></i> Job Description
@@ -153,26 +155,30 @@ function BookingForm() {
               value={formData.jobDescription}
               onChange={handleChange}
               className="form-control"
-              placeholder="Describe your carpentry job"
+              style={{
+                border: '2px solid #dc3545',
+                boxShadow: '0 0 5px rgba(220,53,69,0.3)'
+              }}
+              placeholder="Describe the work needed"
               rows={3}
               required
             />
           </div>
 
           <button className="btn w-100 fw-bold" style={{
-            background: 'linear-gradient(90deg, #198754 60%, #ffc107 100%)',
+            background: '#dc3545',
             color: '#fff',
             borderRadius: '8px',
             fontSize: '1.1rem',
             border: 'none',
-            boxShadow: '0 2px 8px rgba(25,135,84,0.15)'
+            boxShadow: '0 2px 8px rgba(220,53,69,0.2)'
           }}>
             <i className="bi bi-send-check me-2"></i> Submit Booking
           </button>
         </form>              
 
         {submissionMessage && (
-          <div className="mt-4 alert alert-info">
+          <div className="mt-4 alert alert-info text-center">
             {submissionMessage}
           </div>
         )}
