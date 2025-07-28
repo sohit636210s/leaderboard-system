@@ -8,8 +8,10 @@ function LoginPage({ setIsLoggedIn }) {
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    setErrorMsg(''); // Clear previous error
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // ✅ Prevent page refresh
+    setErrorMsg('');    // Clear previous error
+
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/worker/login`, {
         email,
@@ -43,7 +45,7 @@ function LoginPage({ setIsLoggedIn }) {
           borderImage: 'linear-gradient(90deg, #198754 60%, #dc3545 100%) 1',
         }}
       >
-        {/* Error Message */}
+        {/* 🔴 Error Message */}
         {errorMsg && (
           <div className="text-danger fw-semibold mb-3 text-center" style={{ fontSize: '0.95rem' }}>
             {errorMsg}
@@ -71,62 +73,62 @@ function LoginPage({ setIsLoggedIn }) {
           Login for Worker
         </h4>
 
-        <div className="mb-3">
-          <label className="form-label fw-semibold" htmlFor="email">
-            Email Address
-          </label>
-          <div className="input-group">
-            <span className="input-group-text bg-light">
-              <i className="bi bi-envelope-fill" style={{ color: '#198754' }}></i>
-            </span>
-            <input
-              id="email"
-              className="form-control"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              autoComplete="username"
-              required
-            />
+        {/* 📝 Form Start */}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="email">Email Address</label>
+            <div className="input-group">
+              <span className="input-group-text bg-light">
+                <i className="bi bi-envelope-fill" style={{ color: '#198754' }}></i>
+              </span>
+              <input
+                id="email"
+                className="form-control"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="username"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="mb-3">
-          <label className="form-label fw-semibold" htmlFor="password">
-            Password
-          </label>
-          <div className="input-group">
-            <span className="input-group-text bg-light">
-              <i className="bi bi-lock-fill" style={{ color: '#dc3545' }}></i>
-            </span>
-            <input
-              id="password"
-              className="form-control"
-              type="password"
-              placeholder="Enter your password"
-              value={pass}
-              onChange={e => setPass(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
+          <div className="mb-3">
+            <label className="form-label fw-semibold" htmlFor="password">Password</label>
+            <div className="input-group">
+              <span className="input-group-text bg-light">
+                <i className="bi bi-lock-fill" style={{ color: '#dc3545' }}></i>
+              </span>
+              <input
+                id="password"
+                className="form-control"
+                type="password"
+                placeholder="Enter your password"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <button
-          className="btn w-100 fw-bold"
-          style={{
-            background: 'linear-gradient(90deg, #198754 60%, #dc3545 100%)',
-            color: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(25,135,84,0.15)',
-            border: 'none',
-            fontSize: '1.1rem',
-          }}
-          onClick={handleLogin}
-        >
-          <i className="bi bi-box-arrow-in-right me-2"></i>Login
-        </button>
+          <button
+            type="submit"
+            className="btn w-100 fw-bold"
+            style={{
+              background: 'linear-gradient(90deg, #198754 60%, #dc3545 100%)',
+              color: '#fff',
+              borderRadius: '8px',
+              boxShadow: '0 2px 8px rgba(25,135,84,0.15)',
+              border: 'none',
+              fontSize: '1.1rem',
+            }}
+          >
+            <i className="bi bi-box-arrow-in-right me-2"></i>Login
+          </button>
+        </form>
+        {/* 📝 Form End */}
 
         <div className="text-center mt-3">
           <span className="text-muted">Not registered?</span>{' '}
