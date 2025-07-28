@@ -1,5 +1,8 @@
+// App.js
+
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import ContactPage from './components/ContactPage';
@@ -11,14 +14,14 @@ import WorkerLogin from './components/WorkerLogin';
 import CustomerLogin from './components/CustomerLogin';
 import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
-import AdminBookingList from './components/AdminBookingList'; // 👈 NEW
-
+import AdminBookingList from './components/AdminBookingList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [worker, setWorker] = useState(null); // 👈 to customize Navbar if needed
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,79 +32,14 @@ function AppContent() {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     setIsLoggedIn(false);
+    setWorker(null); // optional cleanup
     navigate('/login');
   };
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top" style={{ borderBottom: '2px solid #0d6efd', zIndex: 1050 }}>
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img
-            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=60&q=80"
-            alt="Logo"
-            style={{ width: 40, height: 40, borderRadius: '50%', marginRight: 10, border: '2px solid #ffc107' }}
-          />
-          <span style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#ffc107' }}>Carpenter Portal</span>
-        </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navMenu">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/">
-                <i className="bi bi-house-door-fill me-1" style={{ color: '#198754', fontSize: '1.2rem' }}></i>
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/about">
-                <i className="bi bi-info-circle-fill me-1" style={{ color: '#0d6efd', fontSize: '1.2rem' }}></i>
-                About Us
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/booking">
-                <i className="bi bi-calendar-check-fill me-1" style={{ color: '#ffc107', fontSize: '1.2rem' }}></i>
-                Booking
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/contact">
-                <i className="bi bi-telephone-fill me-1" style={{ color: '#198754', fontSize: '1.2rem' }}></i>
-                Contact Us
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center" to="/admin/bookings">
-                <i className="bi bi-journal-text me-1" style={{ color: '#0d6efd', fontSize: '1.2rem' }}></i>
-                All Bookings
-              </Link>
-            </li>
-          </ul>
-          <div className="d-flex">
-            {isLoggedIn ? (
-              <>
-                <span className="text-light me-3">👋 Welcome</span>
-                <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="btn btn-outline-light me-2"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  <i className="bi bi-person-circle me-1"></i>Login
-                </button>
-                <Link to="/signup" className="btn btn-success">
-                  <i className="bi bi-person-plus-fill me-1"></i>Signup
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+      {/* Modular Navbar Component */}
+      <Navbar worker={worker} handleLogout={handleLogout} isLoggedIn={isLoggedIn} setShowLoginModal={setShowLoginModal} />
 
       {/* Login Modal */}
       {showLoginModal && (
@@ -120,7 +58,6 @@ function AppContent() {
         </div>
       )}
 
-      {/* Add padding so content is not hidden behind navbar */}
       <div style={{ paddingTop: '70px' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -128,12 +65,12 @@ function AppContent() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/admin/customers" element={<AdminCustomerList />} />
-          <Route path="/admin/bookings" element={<AdminBookingList />} /> {/* 👈 NEW */}
+          <Route path="/admin/bookings" element={<AdminBookingList />} />
           <Route path="/signup" element={<SignupSelector />} />
           <Route path="/worker-signup" element={<WorkerSignup />} />
           <Route path="/customer-signup" element={<CustomerSignup />} />
-          <Route path="/worker-login" element={<WorkerLogin />} />
-          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/worker-login" element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/customer-login" element={<CustomerLogin setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         </Routes>
       </div>
