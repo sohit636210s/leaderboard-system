@@ -4,48 +4,54 @@ const bcrypt = require('bcrypt');
 const workerSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required'],
     trim: true
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
-    match: /^\S+@\S+\.\S+$/
+    match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],
+    index: true
   },
   password: {
     type: String,
-    required: true,
-    minlength: 6
+    required: [true, 'Password is required'],
+    minlength: [6, 'Password must be at least 6 characters']
   },
   contact: {
     type: String,
-    required: true,
+    required: [true, 'Contact number is required'],
     unique: true,
-    match: /^[6-9]\d{9}$/
+    match: [/^[6-9]\d{9}$/, 'Invalid Indian mobile number']
   },
   address: {
     type: String,
-    required: true,
+    required: [true, 'Address is required'],
     trim: true
   },
   pincode: {
     type: String,
-    required: true,
-    match: /^[1-9][0-9]{5}$/
+    required: [true, 'Pincode is required'],
+    match: [/^[1-9][0-9]{5}$/, 'Invalid 6-digit pincode']
   },
   city: {
     type: String,
-    trim: true // optional in new flow
+    trim: true, // optional in new flow
+    default: ''
   },
   skill: {
     type: String,
-    required: true,
-    enum: ['Carpenter', 'Electrician', 'Plumber', 'Painter', 'Other']
+    required: [true, 'Skill is required'],
+    enum: {
+      values: ['Carpenter', 'Electrician', 'Plumber', 'Painter', 'Other'],
+      message: 'Invalid skill type'
+    }
   },
   photo: {
-    type: String // filename or image path
+    type: String,
+    default: 'default.jpg' // fallback if multer fails
   },
   isAvailable: {
     type: Boolean,
@@ -53,11 +59,16 @@ const workerSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// 🔐 Hash password before save
+// 🔐 Password hashing pre-save
 workerSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  try {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = mongoose.model('Worker', workerSchema);
