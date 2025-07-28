@@ -26,7 +26,7 @@ function WorkerSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      alert('🚫 Passwords do not match');
       return;
     }
 
@@ -37,23 +37,24 @@ function WorkerSignup() {
 
     try {
       const backendURL = process.env.REACT_APP_BACKEND_URL;
-      await axios.post(`${backendURL}/api/workers/register`, payload, {
+      const res = await axios.post(`${backendURL}/api/workers/register`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      alert('✅ Worker registered successfully!');
-      // redirect or modal here
+      alert(`✅ ${res.data.message}`);
+      // redirect logic here if needed
     } catch (err) {
-      alert('❌ Error during registration');
-      console.error(err);
+      const errorMsg = err.response?.data?.details || err.response?.data?.error || 'Registration failed';
+      alert(`❌ ${errorMsg}`);
+      console.error('Registration error:', err);
     }
   };
 
   return (
     <div style={{
-      maxWidth: 500, margin: 'auto', marginTop: '50px',
+      maxWidth: 520, margin: 'auto', marginTop: '50px',
       border: '2px solid #e91e63', padding: 25, borderRadius: 12,
-      background: '#fdf4f9' // 🎨 Light theme you can brand later
+      background: '#fdf4f9'
     }}>
       <h3 className="text-center mb-4 text-danger fw-bold">
         👷 काम करने वाला रजिस्ट्रेशन (Worker Signup)
@@ -66,8 +67,7 @@ function WorkerSignup() {
           { name: 'confirmPassword', placeholder: 'Confirm Password', type: 'password' },
           { name: 'contact', placeholder: 'Mobile Number' },
           { name: 'address', placeholder: 'Full Address' },
-          { name: 'pincode', placeholder: 'Area Pincode' },
-          { name: 'skill', placeholder: 'Skill (e.g. Carpenter)' }
+          { name: 'pincode', placeholder: 'Area Pincode' }
         ].map(({ name, placeholder, type = 'text' }) => (
           <input
             key={name}
@@ -81,6 +81,24 @@ function WorkerSignup() {
             required
           />
         ))}
+
+        {/* 🔧 Skill Dropdown Fix */}
+        <div className="mb-3">
+          <label className="form-label fw-semibold">Select Skill:</label>
+          <select
+            name="skill"
+            value={formData.skill}
+            onChange={handleChange}
+            className="form-control"
+            style={{ border: '1.5px solid #e91e63' }}
+            required
+          >
+            <option value="">-- Select Skill --</option>
+            {['Carpenter', 'Electrician', 'Plumber', 'Painter', 'Other'].map(skill => (
+              <option key={skill} value={skill}>{skill}</option>
+            ))}
+          </select>
+        </div>
 
         {/* 🖼️ Photo Upload */}
         <div className="mb-3">
