@@ -13,7 +13,7 @@ const {
   toggleAvailability
 } = require('../controllers/workerController');
 
-// 🔒 Middleware (Optional if protected route needed)
+// 🔒 Auth Middleware
 const { requireAuth } = require('../middlewares/authMiddleware');
 
 // 📁 Setup multer for photo upload
@@ -31,22 +31,22 @@ const upload = multer({ storage });
 
 /* -------------------------------------------------- */
 
-// 🔐 Register Worker
+// 🔐 Register Worker (Public)
 router.post('/register', upload.single('photo'), registerWorker);
 
-// 🔑 Worker Login
+// 🔑 Worker Login (Public)
 router.post('/login', loginWorker);
 
-// 📥 Worker Profile
+// 📥 Worker Profile (Public — by ID)
 router.get('/profile/:id', getWorkerProfile);
 
-// 📝 Update Worker
-router.put('/update/:id', updateWorker);
+// 📝 Update Worker (Protected)
+router.put('/update/:id', requireAuth, updateWorker);
 
-// 🎯 Toggle Availability
-router.put('/toggle-availability/:id', toggleAvailability);
+// 🎯 Toggle Availability (Protected)
+router.put('/toggle-availability/:id', requireAuth, toggleAvailability);
 
-// 📄 List Available Workers
+// 📄 List Available Workers (Public)
 router.get('/list', async (req, res) => {
   try {
     const workers = await require('../models/Worker').find({ isAvailable: true });
