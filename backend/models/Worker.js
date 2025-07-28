@@ -38,7 +38,7 @@ const workerSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    trim: true, // optional in new flow
+    trim: true,
     default: ''
   },
   skill: {
@@ -51,15 +51,30 @@ const workerSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default: 'default.jpg' // fallback if multer fails
+    default: 'default.jpg'
   },
   isAvailable: {
     type: Boolean,
     default: true
+  },
+  bio: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  rating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5
+  },
+  verified: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 
-// 🔐 Password hashing pre-save
+// 🔐 Auto-hash password before saving
 workerSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {

@@ -1,9 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const Worker = require('../models/Worker');
-const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+
+// 📦 Controllers
+const {
+  registerWorker,
+  loginWorker,
+  updateWorker,
+  getWorkerProfile,
+  toggleAvailability
+} = require('../controllers/workerController');
+
+// 🔒 Middleware (Optional if protected route needed)
+const { requireAuth } = require('../middlewares/authMiddleware');
 
 // 📁 Setup multer for photo upload
 const storage = multer.diskStorage({
@@ -18,49 +29,33 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ Register Worker with validation & error response
-router.post('/register', upload.single('photo'), async (req, res) => {
-  try {
-    const { name, email, password, contact, address, pincode, skill } = req.body;
+/* -------------------------------------------------- */
 
-    // 🔍 Basic field check
-    if (!name || !email || !password || !contact || !address || !pincode || !skill) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+// 🔐 Register Worker
+router.post('/register', upload.single('photo'), registerWorker);
 
-    // 🧾 Check for existing worker
-    const existing = await Worker.findOne({ email });
-    if (existing) {
-      return res.status(409).json({ error: 'Email already registered' });
-    }
+// 🔑 Worker Login
+router.post('/login', loginWorker);
 
-    const worker = new Worker({
-      name,
-      email,
-      password,
-      contact,
-      address,
-      pincode,
-      skill,
-      photo: req.file ? req.file.filename : null
-    });
+// 📥 Worker Profile
+router.get('/profile/:id', getWorkerProfile);
 
-    await worker.save();
-    res.status(201).json({ message: '✅ Worker registered successfully', worker });
-  } catch (err) {
-    console.error('❌ Worker registration error:', err.message);
-    res.status(500).json({ error: 'Internal server error during registration' });
-  }
-});
+// 📝 Update Worker
+router.put('/update/:id', updateWorker);
 
-// 📄 List available workers
+// 🎯 Toggle Availability
+router.put('/toggle-availability/:id', toggleAvailability);
+
+// 📄 List Available Workers
 router.get('/list', async (req, res) => {
   try {
-    const workers = await Worker.find({ isAvailable: true });
+    const workers = await require('../models/Worker').find({ isAvailable: true });
     res.json(workers);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch workers' });
   }
 });
+
+/* -------------------------------------------------- */
 
 module.exports = router;
