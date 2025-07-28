@@ -1,19 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Sample logic — replace with real API call
-    if (email === 'admin@carpenter.com' && pass === '123456') {
-      localStorage.setItem('authToken', 'sample-session-token');
-      setIsLoggedIn && setIsLoggedIn(true);
-      navigate('/');
-    } else {
-      alert('Login failed!');
+  const handleLogin = async () => {
+    setErrorMsg(''); // Clear previous error
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/worker/login`, {
+        email,
+        password: pass,
+      });
+
+      const { token, worker, message } = res?.data || {};
+
+      if (token) {
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('workerInfo', JSON.stringify(worker));
+        setIsLoggedIn && setIsLoggedIn(true);
+        navigate('/');
+      } else {
+        setErrorMsg(message || 'Login failed!');
+      }
+    } catch (err) {
+      setErrorMsg(err?.response?.data?.message || 'Invalid credentials!');
     }
   };
 
@@ -29,6 +43,13 @@ function LoginPage({ setIsLoggedIn }) {
           borderImage: 'linear-gradient(90deg, #198754 60%, #dc3545 100%) 1',
         }}
       >
+        {/* Error Message */}
+        {errorMsg && (
+          <div className="text-danger fw-semibold mb-3 text-center" style={{ fontSize: '0.95rem' }}>
+            {errorMsg}
+          </div>
+        )}
+
         {/* Logo */}
         <div className="text-center mb-3">
           <img
@@ -44,10 +65,12 @@ function LoginPage({ setIsLoggedIn }) {
             }}
           />
         </div>
+
         <h4 className="text-center mb-4 fw-bold" style={{ color: '#198754' }}>
           <i className="bi bi-person-badge" style={{ color: '#dc3545', fontSize: '1.5rem', verticalAlign: 'middle' }}></i>{' '}
           Login for Worker
         </h4>
+
         <div className="mb-3">
           <label className="form-label fw-semibold" htmlFor="email">
             Email Address
@@ -64,9 +87,11 @@ function LoginPage({ setIsLoggedIn }) {
               value={email}
               onChange={e => setEmail(e.target.value)}
               autoComplete="username"
+              required
             />
           </div>
         </div>
+
         <div className="mb-3">
           <label className="form-label fw-semibold" htmlFor="password">
             Password
@@ -83,9 +108,11 @@ function LoginPage({ setIsLoggedIn }) {
               value={pass}
               onChange={e => setPass(e.target.value)}
               autoComplete="current-password"
+              required
             />
           </div>
         </div>
+
         <button
           className="btn w-100 fw-bold"
           style={{
@@ -100,6 +127,7 @@ function LoginPage({ setIsLoggedIn }) {
         >
           <i className="bi bi-box-arrow-in-right me-2"></i>Login
         </button>
+
         <div className="text-center mt-3">
           <span className="text-muted">Not registered?</span>{' '}
           <button
