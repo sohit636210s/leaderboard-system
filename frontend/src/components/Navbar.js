@@ -12,7 +12,7 @@ function Navbar({ worker, handleLogout }) {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top" style={{ borderBottom: '2px solid #0d6efd', zIndex: 1050 }}>
       <Link className="navbar-brand d-flex align-items-center" to="/">
         <img
-          src="/images/logo.jpg"
+          src="/images/logo.avif"
           alt="Logo"
           style={{
             width: 40,
