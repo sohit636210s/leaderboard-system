@@ -15,7 +15,23 @@ function HomePage() {
               <span style={{ color: '#198754' }}>अब ऑनलाइन</span> <span style={{ color: '#0d6efd' }}>कारपेंटर</span> <span style={{ color: '#ffc107' }}>घर बुलाओ</span> <span style={{ color: '#212529' }}>इंडिया में!</span>
             </h1>
             <p className="lead text-dark mb-4" style={{ fontWeight: '500' }}>
-              भरोसेमंद, कुशल और किफायती कारपेंटरी सेवाएँ अब आपके शहर में। <br />
+              🔑 Suggested English Content
+Expert Carpentry & Interior Solutions  
+From reliable repairs to custom furniture, we bring craftsmanship to your doorstep.
+
+Carpenter Repairs — Quick fixes and restoration for wooden furniture and fittings.
+
+Plywood & UPVC Cupboards — Durable, stylish cupboards built with precision.
+
+Kitchen Interiors — Modular kitchens designed for functionality and elegance.
+
+Bedroom Furniture — Wardrobes, beds, and storage solutions tailored to your space.
+
+TV Cabinets — Modern entertainment units that blend style with utility.
+
+Custom Work — Personalized carpentry solutions for unique requirements.
+
+Professional craftsmanship, affordable pricing, and all‑India service — your trusted partner for every carpentry need. <br />
               फर्नीचर बनवाएँ, मरम्मत कराएँ या कस्टम वर्क के लिए अभी बुक करें।
             </p>
             <button
