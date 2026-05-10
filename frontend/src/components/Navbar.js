@@ -22,7 +22,7 @@ function Navbar({ worker, handleLogout }) {
             border: '2px solid #ffc107'
           }}
         />
-        <span style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#ffc107' }}>Carpenter Portal</span>
+        <span style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#ffc107' }}>Furniture kaamwallah.in</span>
       </Link>
 
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
