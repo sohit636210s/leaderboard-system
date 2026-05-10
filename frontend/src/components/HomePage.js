@@ -15,7 +15,6 @@ function HomePage() {
               <span style={{ color: '#198754' }}>अब ऑनलाइन</span> <span style={{ color: '#0d6efd' }}>कारपेंटर</span> <span style={{ color: '#ffc107' }}>घर बुलाओ</span> <span style={{ color: '#212529' }}>इंडिया में!</span>
             </h1>
             <p className="lead text-dark mb-4" style={{ fontWeight: '500' }}>
-              🔑 Suggested English Content
 Expert Carpentry & Interior Solutions  
 From reliable repairs to custom furniture, we bring craftsmanship to your doorstep.
 
@@ -45,7 +44,7 @@ Professional craftsmanship, affordable pricing, and all‑India service — your
               }}
               onClick={() => setShowBookingModal(true)}
             >
-              अभी बुक करें
+              BOOK NOW(अभी बुक करें)
             </button>
           </div>
           <div className="col-md-6 col-12 text-center">
