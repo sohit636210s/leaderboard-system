@@ -15,11 +15,11 @@ function Navbar({ worker, handleLogout }) {
           src="/images/logo.jpg"
           alt="Logo"
           style={{
-            width: 40,
-            height: 40,
+            width: 70,
+            height: 70,
             borderRadius: '50%',
             marginRight: 10,
-            border: '2px solid #ffc107'
+            border: '2px solid #18dd39'
           }}
         />
         <span style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#ffc107' }}>Furniture kaamwallah.in</span>
