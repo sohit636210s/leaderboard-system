@@ -34,7 +34,7 @@ function HomePage() {
           </div>
           <div className="col-md-6 col-12 text-center">
             <img
-              src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80"
+              src="/images/carpenter.jpg"
               alt="Carpenter"
               className="img-fluid rounded shadow border border-3 border-primary"
               style={{ maxHeight: '320px', objectFit: 'cover' }}
