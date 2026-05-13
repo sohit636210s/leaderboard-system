@@ -27,6 +27,7 @@ function AboutPage() {
                 <h3 className="text-center mb-4 text-primary">हमारी कहानी / Our Story</h3>
                 <Row>
                   <Col md={6}>
+                    <img src="https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=400&h=300&fit=crop" alt="Carpenter at Work" className="img-fluid rounded mb-3" />
                     <h5 className="mb-3">🔹 हिंदी में:</h5>
                     <p>
                       मैं एक अनुभवी <strong>कारपेंटर</strong> हूँ जो फर्नीचर से जुड़ा हर छोटा-बड़ा काम सही रेट पर करता हूँ। अगर जरूरत हो तो मैं अपने अनुभव के अनुसार काम को मैनेज करता हूँ ताकि ग्राहक पूरी तरह संतुष्ट हो सके।
@@ -96,6 +97,7 @@ function AboutPage() {
               <Col md={4} className="mb-3">
                 <Card className="text-center h-100 shadow-sm">
                   <Card.Body>
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop" alt="Furniture Repair" className="img-fluid rounded mb-3" />
                     <FaTools size={40} className="text-primary mb-3" />
                     <h5>फर्नीचर रिपेयर / Furniture Repair</h5>
                     <p>टूटे हुए फर्नीचर को मरम्मत करना और उसे नया जैसा बनाना।</p>
@@ -106,6 +108,7 @@ function AboutPage() {
               <Col md={4} className="mb-3">
                 <Card className="text-center h-100 shadow-sm">
                   <Card.Body>
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=200&fit=crop" alt="Custom Furniture" className="img-fluid rounded mb-3" />
                     <FaUserTie size={40} className="text-primary mb-3" />
                     <h5>कस्टम फर्नीचर / Custom Furniture</h5>
                     <p>आपकी आवश्यकताओं के अनुसार कस्टम फर्नीचर डिजाइन और निर्माण।</p>
@@ -116,6 +119,7 @@ function AboutPage() {
               <Col md={4} className="mb-3">
                 <Card className="text-center h-100 shadow-sm">
                   <Card.Body>
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop" alt="Installation" className="img-fluid rounded mb-3" />
                     <FaHandshake size={40} className="text-primary mb-3" />
                     <h5>इंस्टॉलेशन / Installation</h5>
                     <p>नए फर्नीचर का पेशेवर तरीके से इंस्टॉलेशन।</p>
@@ -127,34 +131,22 @@ function AboutPage() {
           </Col>
         </Row>
 
-        {/* Why Choose Us */}
+        {/* Our Work Gallery */}
         <Row className="mb-5">
           <Col>
-            <h3 className="text-center mb-4 text-primary">हमें क्यों चुनें / Why Choose Us</h3>
+            <h3 className="text-center mb-4 text-primary">हमारा काम / Our Work</h3>
             <Row className="text-center">
-              <Col md={3}>
-                <FaTools size={40} className="text-warning mb-2" />
-                <h6>कुशल टीम / Skilled Team</h6>
-                <p>अनुभवी और प्रशिक्षित कारपेंटर।</p>
-                <p>Experienced and trained carpenters.</p>
+              <Col md={3} className="mb-3">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=250&h=200&fit=crop" alt="Wooden Table" className="img-fluid rounded shadow-sm" />
               </Col>
-              <Col md={3}>
-                <FaUserTie size={40} className="text-primary mb-2" />
-                <h6>पेशेवर प्रबंधन / Professional Management</h6>
-                <p>काम का पूरा नियंत्रण और निगरानी।</p>
-                <p>Complete control and monitoring of work.</p>
+              <Col md={3} className="mb-3">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=250&h=200&fit=crop" alt="Chair Repair" className="img-fluid rounded shadow-sm" />
               </Col>
-              <Col md={3}>
-                <FaHandshake size={40} className="text-success mb-2" />
-                <h6>ग्राहक संतुष्टि / Customer Satisfaction</h6>
-                <p>संतुष्टि की गारंटी।</p>
-                <p>Satisfaction guaranteed.</p>
+              <Col md={3} className="mb-3">
+                <img src="https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=250&h=200&fit=crop" alt="Carpenter Tools" className="img-fluid rounded shadow-sm" />
               </Col>
-              <Col md={3}>
-                <FaPhoneAlt size={40} className="text-danger mb-2" />
-                <h6>आसान बुकिंग / Easy Booking</h6>
-                <p>ऑनलाइन बुकिंग की सुविधा।</p>
-                <p>Online booking facility.</p>
+              <Col md={3} className="mb-3">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=250&h=200&fit=crop" alt="Custom Cabinet" className="img-fluid rounded shadow-sm" />
               </Col>
             </Row>
           </Col>
