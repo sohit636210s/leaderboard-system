@@ -13,7 +13,7 @@ function ContactPage() {
             <Card.Body>
               <Card.Text className="mb-3">
                 <FaPhoneAlt className="text-success me-2" />
-                <strong>Phone:</strong> +91-6362107408
+                <strong>Phone:</strong> +91-9852634252
               </Card.Text>
 
               <Card.Text className="mb-3">
