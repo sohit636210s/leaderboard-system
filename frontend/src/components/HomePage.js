@@ -53,6 +53,20 @@ function HomePage() {
           </div>
         </section>
 
+        <section id="upvc-services" className="upvc-section py-5" aria-labelledby="upvc-heading">
+          <div className="container">
+            <div className="row align-items-end g-3 mb-4">
+              <div className="col-lg-8"><p className="eyebrow">BUILT FOR INDIAN HOMES</p><h2 id="upvc-heading">Expert Wooden &amp; UPVC Home Interiors</h2><p className="section-copy">As your No. 1 Premium Carpenter in India, Furniture Kaam Wallah creates durable interiors with thoughtful design, precise installation, and honest pricing.</p></div>
+              <div className="col-lg-4 text-lg-end"><p className="seo-note">Your Best UPVC Modular Kitchen Designer for modern, low-maintenance spaces.</p></div>
+            </div>
+            <div className="row g-4">
+              <div className="col-12 col-md-4"><article className="upvc-card"><div className="upvc-icon"><i className="bi bi-columns-gap"></i></div><h3>Modern UPVC Cupboards &amp; Wardrobes</h3><p>Top Custom UPVC Cupboards and Wardrobes with a clean finish, 100% water-proof panels, and termite-proof storage.</p><button className="btn btn-outline-dark btn-sm" onClick={() => openEstimate('UPVC Cupboards')}><i className="bi bi-arrow-up-right me-1"></i>Check Collection</button></article></div>
+              <div className="col-12 col-md-4"><article className="upvc-card featured"><div className="upvc-icon"><i className="bi bi-fire"></i></div><h3>Termite-Proof UPVC Modular Kitchens</h3><p>Fire-retardant, water-proof kitchens engineered for everyday Indian cooking and made for lifetime durability.</p><a className="btn btn-light btn-sm" href="https://wa.me/919852634252?text=I%20want%20an%20UPVC%20modular%20kitchen" target="_blank" rel="noopener noreferrer"><i className="bi bi-whatsapp me-1"></i>Enquire on WhatsApp</a></article></div>
+              <div className="col-12 col-md-4"><article className="upvc-card"><div className="upvc-icon"><i className="bi bi-stars"></i></div><h3>Luxury UPVC Bedroom Interiors</h3><p>Elegant bedrooms with easy-clean surfaces, strong hardware, and timeless storage that stays beautiful for years.</p><button className="btn btn-outline-dark btn-sm" onClick={() => openEstimate('UPVC Bedroom Interiors')}><i className="bi bi-arrow-up-right me-1"></i>Check Collection</button></article></div>
+            </div>
+          </div>
+        </section>
+
         <section id="categories" className="categories-section py-5"><div className="container"><div className="d-flex justify-content-between align-items-end mb-4"><div><p className="eyebrow">THE FKW EDIT</p><h2>Made for modern Indian homes.</h2></div><span className="category-count">04 / 04</span></div><div className="row g-4">{categories.map((category) => <div className="col-12 col-md-6 col-lg-3" key={category.name}><article className="category-card"><img src={category.image} alt={`${category.name} custom furniture`} loading="lazy" /><div className="category-overlay"><i className={`bi ${category.icon}`}></i><h3>{category.name}</h3><button className="btn btn-light btn-sm" onClick={() => openEstimate(category.name)}>Explore Store <i className="bi bi-arrow-up-right ms-1"></i></button></div></article></div>)}</div></div></section>
       </main>
 

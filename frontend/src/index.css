@@ -6,6 +6,10 @@ body {
 }
 
 .home-page { background: #f7f4ef; }
+.site-navbar { border-bottom: 2px solid #0d6efd; z-index: 1050; }
+.navbar-collapse { display: flex; align-items: center; }
+.drawer-close, .drawer-quote, .drawer-backdrop { display: none; }
+.mobile-nav-links { display: none; }
 .hero-section { background: radial-gradient(circle at 80% 20%, #e5efdf 0, #f7f4ef 42%); padding-top: 2rem; }
 .hero-section h1, .planner-section h2, .categories-section h2 { color: #17231e; letter-spacing: 0; }
 .hero-section h1 span { color: #187b58; }
@@ -19,6 +23,8 @@ body {
 .hero-proof strong { color: #17231e; font-size: 1.2rem; }.stars { color: #d9982e; letter-spacing: .1em; }
 .btn-primary { background: #187b58; border-color: #187b58; }.btn-primary:hover { background: #125d43; border-color: #125d43; }
 .planner-section { background: #e5efdf; }
+.upvc-section { background: #fffdf8; }.section-copy, .seo-note { font: 1rem/1.6 Arial, sans-serif; color: #66736c; }.seo-note { color: #187b58; font-weight: 700; }
+.upvc-card { height: 100%; padding: 1.7rem; border: 1px solid #d5ded5; background: #f7f4ef; transition: transform .25s ease, box-shadow .25s ease; }.upvc-card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px #17231e18; }.upvc-card.featured { background: #187b58; color: #fff; border-color: #187b58; }.upvc-card p { min-height: 78px; font: .95rem/1.6 Arial, sans-serif; color: #66736c; }.upvc-card.featured p { color: #e5efdf; }.upvc-card h3 { min-height: 58px; font-size: 1.35rem; }.upvc-icon { color: #c66b3d; font-size: 2rem; margin-bottom: 1rem; }.featured .upvc-icon { color: #e8b56d; }
 .planner-section h2, .categories-section h2 { font-size: 3.2rem; }
 .planner-section p:not(.eyebrow) { font: 1rem/1.6 Arial, sans-serif; }
 .planner-panel { padding: 1.5rem; background: #fffdf8; box-shadow: 0 10px 30px #17231e12; }
@@ -39,9 +45,18 @@ body {
   .navbar-brand {
     font-size: 1.2rem;
   }
-  .navbar-nav {
-    flex-direction: column;
-    text-align: center;
-  }
+  .navbar-brand img { width: 38px !important; height: 38px !important; margin-right: 6px !important; }.navbar-brand span { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem !important; }
+  .navbar-toggler { position: relative; z-index: 1060; border-color: #ffffff66; }
+  .navbar-collapse { position: fixed; z-index: 1055; inset: 0 0 0 auto; width: min(86vw, 360px); padding: 5.5rem 1.5rem 1.5rem; display: flex; flex-direction: column; align-items: stretch; background: #17231ef7; backdrop-filter: blur(16px); transform: translateX(105%); transition: transform .3s ease; box-shadow: -16px 0 40px #0005; }
+  .navbar-collapse.menu-open { transform: translateX(0); }
+  .navbar-nav { flex-direction: column; text-align: left; width: 100%; }
+  .desktop-nav-item { display: none; }.mobile-nav-links { display: block; list-style: none; padding: 0; margin: 0; }.mobile-nav-links li { border-bottom: 1px solid #ffffff1c; }.mobile-nav-links a { display: block; padding: .85rem .5rem; color: #fff; text-decoration: none; font: 1rem Arial, sans-serif; }.mobile-nav-links i { width: 28px; color: #e8b56d; }
+  .navbar-nav .nav-link { padding: .85rem .5rem; border-bottom: 1px solid #ffffff1c; font-size: 1rem; }
+  .navbar-collapse > .d-flex { flex-direction: column; align-items: stretch !important; gap: .65rem; margin-top: 1rem; }
+  .navbar-collapse > .d-flex .desktop-only-control { display: none; }
+  .navbar-collapse > .d-flex .me-2, .navbar-collapse > .d-flex .me-3 { margin-right: 0 !important; }
+  .drawer-close { display: block; position: absolute; top: 1.2rem; right: 1.4rem; border: 0; background: transparent; color: #fff; font-size: 1.3rem; }
+  .drawer-quote { display: block; margin-top: auto; text-align: center; padding: .85rem; animation: shop-pulse 2.4s infinite; }
+  .drawer-backdrop { display: block; position: fixed; z-index: 1051; inset: 0; border: 0; background: #0008; }
   .hero-section { padding-top: 1rem; }.hero-image { height: 300px; }.hero-badge { right: 8px; bottom: 12px; }.planner-section h2, .categories-section h2 { font-size: 2.2rem; }.planner-result { align-items: flex-start; flex-direction: column; }.planner-result .btn { width: 100%; }.shop-cta { margin: .75rem 0; width: 100%; }
 }
