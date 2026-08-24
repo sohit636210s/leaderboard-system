@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { FaTools, FaUserTie, FaHandshake, FaPhoneAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
+import { FaTools, FaUserTie, FaHandshake, FaStar, FaCheckCircle } from 'react-icons/fa';
 
 function AboutPage() {
   return (
