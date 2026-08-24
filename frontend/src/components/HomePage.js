@@ -9,7 +9,7 @@ function HomePage() {
     { name: 'Modular Kitchen', icon: 'bi-grid-3x3-gap-fill', image: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&auto=format&fit=crop' },
     { name: 'Luxury Sofa', icon: 'bi-house-heart-fill', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop' },
     { name: 'King Size Bed', icon: 'bi-moon-stars-fill', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&auto=format&fit=crop' },
-    { name: 'Wardrobe', icon: 'bi-box-seam-fill', image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?w=800&auto=format&fit=crop' }
+    { name: 'Wardrobe', icon: 'bi-box-seam-fill', image: '/images/upvc-wardrobe.jpg' }
   ];
 
   const openEstimate = (category = selectedCategory) => {
@@ -68,6 +68,8 @@ function HomePage() {
         </section>
 
         <section id="categories" className="categories-section py-5"><div className="container"><div className="d-flex justify-content-between align-items-end mb-4"><div><p className="eyebrow">THE FKW EDIT</p><h2>Made for modern Indian homes.</h2></div><span className="category-count">04 / 04</span></div><div className="row g-4">{categories.map((category) => <div className="col-12 col-md-6 col-lg-3" key={category.name}><article className="category-card"><img src={category.image} alt={`${category.name} custom furniture`} loading="lazy" /><div className="category-overlay"><i className={`bi ${category.icon}`}></i><h3>{category.name}</h3><button className="btn btn-light btn-sm" onClick={() => openEstimate(category.name)}>Explore Store <i className="bi bi-arrow-up-right ms-1"></i></button></div></article></div>)}</div></div></section>
+
+        <section className="projects-section py-5" aria-labelledby="projects-heading"><div className="container"><p className="eyebrow">RECENT PROJECTS</p><h2 id="projects-heading">Spaces we shaped for real homes.</h2><div className="row g-4 mt-2"><div className="col-12 col-md-6"><article className="project-card"><img src="/images/upvc-wardrobe.jpg" alt="Custom UPVC wardrobe and bedroom interior" loading="lazy" /><div><h3>Custom UPVC Wardrobe</h3><p>Clean, durable storage designed around your room.</p></div></article></div><div className="col-12 col-md-6"><article className="project-card"><img src="/images/tv-unit.jpg" alt="Modern custom TV unit and living room interior" loading="lazy" /><div><h3>Modern TV Unit</h3><p>Warm wood tones with smart, functional storage.</p></div></article></div></div></div></section>
       </main>
 
       {/* Booking Modal */}
