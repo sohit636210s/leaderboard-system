@@ -59,6 +59,9 @@ function Navbar({ worker, handleLogout }) {
         </ul>
 
         <div className="d-flex align-items-center">
+          <a href="/#categories" className="btn btn-warning fw-bold shop-cta me-2">
+            <i className="bi bi-bag-heart me-1"></i>Shop Furniture
+          </a>
           {worker ? (
             <>
               <div className="d-flex align-items-center me-3" style={{ cursor: 'pointer' }} onClick={goToDashboard}>
