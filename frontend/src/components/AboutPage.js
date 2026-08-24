@@ -1,12 +1,12 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button, Jumbotron } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { FaTools, FaUserTie, FaHandshake, FaPhoneAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
 
 function AboutPage() {
   return (
     <div>
       {/* Hero Section */}
-      <Jumbotron className="bg-primary text-white text-center py-5">
+      <div className="p-5 mb-4 bg-primary text-white text-center rounded-3">
         <Container>
           <h1 className="display-4">🪚 हमारे बारे में / About Us</h1>
           <p className="lead">
@@ -16,7 +16,7 @@ function AboutPage() {
             Professional Carpentry Services – Committed to Quality, Reliability, and Customer Satisfaction
           </p>
         </Container>
-      </Jumbotron>
+      </div>
 
       <Container className="mt-5 mb-5">
         {/* Main Content */}
