@@ -6,10 +6,10 @@ function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('Modular Kitchen');
 
   const categories = [
-    { name: 'Modular Kitchen', icon: 'bi-grid-3x3-gap-fill', image: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&auto=format&fit=crop' },
-    { name: 'Luxury Sofa', icon: 'bi-house-heart-fill', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop' },
-    { name: 'King Size Bed', icon: 'bi-moon-stars-fill', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&auto=format&fit=crop' },
-    { name: 'Wardrobe', icon: 'bi-box-seam-fill', image: '/images/upvc-wardrobe.jpg' }
+    { name: 'Modular Kitchen', icon: 'bi-grid-3x3-gap-fill', image: process.env.PUBLIC_URL + "/images/modular-kitchen.jpg" },
+    { name: 'Luxury Sofa', icon: 'bi-house-heart-fill', image: process.env.PUBLIC_URL + "/images/luxury-sofa.jpg" },
+    { name: 'King Size Bed', icon: 'bi-moon-stars-fill', image: process.env.PUBLIC_URL + "/images/king-size-bed.jpg" },
+    { name: 'Wardrobe', icon: 'bi-box-seam-fill', image: process.env.PUBLIC_URL + "/images/upvc-wardrobe.jpg" }
   ];
   const openEstimate = (category = selectedCategory) => { setSelectedCategory(category); setShowBookingModal(true); };
 
