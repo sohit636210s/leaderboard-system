@@ -12,6 +12,11 @@ body {
 .navbar-collapse { display: flex; align-items: center; }
 .drawer-close, .drawer-quote, .drawer-backdrop { display: none; }
 .mobile-nav-links { display: none; }
+@media (min-width: 992px) {
+  .site-navbar { flex-wrap: nowrap; }
+  .site-navbar .nav-shell { flex-basis: auto; width: auto; }
+  .site-navbar .drawer-quote { display: none !important; }
+}
 .hero-section { background: radial-gradient(circle at 80% 20%, #e5efdf 0, #f7f4ef 42%); padding-top: 2rem; }
 .hero-section h1, .planner-section h2, .categories-section h2 { color: #17231e; letter-spacing: 0; }
 .hero-section h1 span { color: #187b58; }
