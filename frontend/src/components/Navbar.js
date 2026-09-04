@@ -65,6 +65,7 @@ function Navbar({ worker, handleLogout }) {
           <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-moon-stars-fill"></i>Luxury Bedroom</Link></li>
           <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-box-seam-fill"></i>Cupboards</Link></li>
           <li><Link to="/login" onClick={closeMenu}><i className="bi bi-person-circle"></i>Login / Sign In</Link></li>
+          <li><Link to="/signup" onClick={closeMenu}><i className="bi bi-person-plus-fill"></i>Signup</Link></li>
         </ul>
 
         <div className="d-flex align-items-center navbar-actions">
