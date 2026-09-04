@@ -29,11 +29,22 @@ app.use('/api/customers', customerRoutes);    // 🧑‍💼 Customer APIs
 
 // 🚪 Root route — for browser or Render base URL test
 app.get('/', (req, res) => {
-  res.send('🎯 Backend Kaamwallah Server is Running');
+  res.json({
+    status: 'ok',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
+
+app.get('/health', (req, res) => {
+  const databaseConnected = mongoose.connection.readyState === 1;
+  res.status(databaseConnected ? 200 : 503).json({
+    status: databaseConnected ? 'ok' : 'degraded',
+    database: databaseConnected ? 'connected' : 'disconnected'
+  });
 });
 
 // 🧩 MongoDB se connect karna (Atlas via .env)
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 10000 })
   .then(() => console.log('✅ MongoDB Connected'))
   .catch((err) => console.error('❌ MongoDB Error:', err));
 

@@ -4,6 +4,10 @@ const Worker = require('../models/Worker');
 // ✅ Create Booking + Match Worker by pincode
 const createBooking = async (req, res) => {
   try {
+    if (require('mongoose').connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database is not connected. Please try again in a moment.' });
+    }
+
     const { customerName, address, pincode, contact, jobDescription } = req.body;
 
     // 1️⃣ Create & save the booking
@@ -52,7 +56,7 @@ const createBooking = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Booking error:', error.message);
-    res.status(500).json({ error: 'Booking failed. Please try again.' });
+    res.status(500).json({ error: 'Booking could not be saved. Please try again.' });
   }
 };
 
