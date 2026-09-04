@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BookingForm from './BookingForm';
+
+const WORK_HIGHLIGHTS = [
+  { title: 'Carpenter work near Patna', text: 'Wardrobe fitting and custom furniture in progress.', image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=240&q=80' },
+  { title: 'UPVC kitchen installation', text: 'Durable kitchen storage made for everyday homes.', image: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?auto=format&fit=crop&w=240&q=80' },
+  { title: 'Bedroom furniture setup', text: 'Palang, wardrobe and bedroom interiors by our team.', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=240&q=80' }
+];
 
 function HomePage() {
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Modular Kitchen');
+  const [workSpotlight, setWorkSpotlight] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setWorkSpotlight(index => (index + 1) % WORK_HIGHLIGHTS.length), 2000);
+    return () => window.clearInterval(timer);
+  }, [workHighlights.length]);
 
   const categories = [
     { name: 'Modular Kitchen', icon: 'bi-grid-3x3-gap-fill', image: 'modular-kitchen.jpg' },
@@ -24,6 +36,12 @@ function HomePage() {
             <p className="dashboard-subtitle">Custom wardrobes, modular kitchens, bedrooms, halls and UPVC cupboards, made by trusted furniture professionals.</p>
           </div>
           <button className="dashboard-primary" type="button" onClick={() => openEstimate()}><i className="bi bi-calendar2-check"></i> Book your work</button>
+        </section>
+
+        <section className="official-work-spotlight" aria-live="polite">
+          <img src={WORK_HIGHLIGHTS[workSpotlight].image} alt="Furniture work in progress" />
+          <div><p><span className="live-dot"></span> WORK HAPPENING NEAR YOU</p><strong>{WORK_HIGHLIGHTS[workSpotlight].title}</strong><span>{WORK_HIGHLIGHTS[workSpotlight].text}</span></div>
+          <div className="spotlight-dots">{WORK_HIGHLIGHTS.map((highlight, index) => <i key={highlight.title} className={index === workSpotlight ? 'active' : ''}></i>)}</div>
         </section>
 
         <section className="metric-grid" aria-label="Workspace summary">
