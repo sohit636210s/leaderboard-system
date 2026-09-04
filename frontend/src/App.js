@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './components/HomePage';
 import ContactPage from './components/ContactPage';
@@ -14,7 +14,7 @@ import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
 import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
 import ShoppingPage from './components/ShoppingPage';
-import ShoppingAdmin from './components/ShoppingAdmin';
+import AdminPage from './components/AdminPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -23,6 +23,8 @@ function AppContent() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [worker, setWorker] = useState(null); // ✅ To customize Navbar + pass to dashboard
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdminPage = location.pathname === '/admin';
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -42,15 +44,15 @@ function AppContent() {
 
   return (
     <>
-      <Navbar
+      {!isAdminPage && <Navbar
         worker={worker}
         handleLogout={handleLogout}
         isLoggedIn={isLoggedIn}
         setShowLoginModal={setShowLoginModal}
-      />
+      />}
 
       {/* Login Modal */}
-      {showLoginModal && (
+      {!isAdminPage && showLoginModal && (
         <div className="modal d-block" tabIndex="-1" style={{ background: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -70,7 +72,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shopping" element={<ShoppingPage />} />
-          <Route path="/admin" element={<ShoppingAdmin />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/booking" element={<BookingForm />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
