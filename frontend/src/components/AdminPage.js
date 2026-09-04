@@ -20,6 +20,7 @@ function loadProducts() {
 
 function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem(ADMIN_KEY) === 'true');
+  const [selectedModule, setSelectedModule] = useState(() => sessionStorage.getItem('kaamwallah_admin_module') || (sessionStorage.getItem(ADMIN_KEY) === 'true' ? 'shopping' : ''));
   const [credentials, setCredentials] = useState({ userId: '', password: '' });
   const [products, setProducts] = useState(loadProducts);
   const [product, setProduct] = useState(emptyProduct);
@@ -28,6 +29,11 @@ function AdminPage() {
   const [showBookings, setShowBookings] = useState(false);
   const [notice, setNotice] = useState('');
   const [bookingError, setBookingError] = useState('');
+
+  useEffect(() => {
+    document.body.classList.toggle('admin-shopping-mode', selectedModule === 'shopping' && loggedIn);
+    return () => document.body.classList.remove('admin-shopping-mode');
+  }, [selectedModule, loggedIn]);
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/api/products?admin=true`)
@@ -70,9 +76,20 @@ function AdminPage() {
       return;
     }
     sessionStorage.setItem(ADMIN_KEY, 'true');
+    sessionStorage.setItem('kaamwallah_admin_module', selectedModule);
     setLoggedIn(true);
+    if (selectedModule === 'bookings') {
+      setShowBookings(true);
+      axios.get(`${API_BASE_URL}/api/bookings/list`)
+        .then(response => setBookings(Array.isArray(response.data) ? response.data : []))
+        .catch(() => setBookingError('Bookings could not be loaded. Please check the backend connection.'));
+    }
     setNotice('Welcome to your admin dashboard.');
   };
+
+  if (!selectedModule && !loggedIn) {
+    return <main className="admin-page admin-module-page"><section className="admin-module-box"><div className="admin-brand-mark"><i className="bi bi-grid-1x2-fill"></i></div><p className="admin-kicker">FURNITURE KAAM WALLAH / CONTROL ROOM</p><h1>Choose your <span>workspace.</span></h1><p>Open one admin area at a time to keep your work simple and focused.</p><div className="admin-module-grid"><button type="button" onClick={() => setSelectedModule('shopping')}><i className="bi bi-shop"></i><strong>Shopping Admin</strong><span>Add products, update prices, stock and availability.</span><b>Open workspace <i className="bi bi-arrow-right"></i></b></button><button type="button" onClick={() => setSelectedModule('bookings')}><i className="bi bi-journal-check"></i><strong>Work Booking Admin</strong><span>View customer requests and assigned carpenters.</span><b>Open workspace <i className="bi bi-arrow-right"></i></b></button></div><Link className="admin-back-link" to="/"><i className="bi bi-arrow-left"></i> Back to website</Link></section></main>;
+  }
 
   const handleProductSubmit = async event => {
     event.preventDefault();
@@ -109,8 +126,12 @@ function AdminPage() {
     }
   };
 
+  if (loggedIn && selectedModule === 'bookings') {
+    return <main className="admin-page admin-booking-only"><div className="admin-container"><header className="admin-topbar"><Link to="/" className="admin-logo"><span><i className="bi bi-hammer"></i></span> Furniture Kaam Wallah <small>BOOKING ADMIN</small></Link><div className="admin-top-actions"><button type="button" className="admin-outline" onClick={() => { sessionStorage.removeItem(ADMIN_KEY); sessionStorage.removeItem('kaamwallah_admin_module'); setLoggedIn(false); setSelectedModule(''); }}>Sign out</button></div></header><section className="admin-welcome"><div><p className="admin-kicker">WORK BOOKING ADMIN</p><h1>Customer bookings.</h1><p>Review every furniture request and the carpenter matched to it.</p></div><button type="button" className="admin-primary admin-bookings-button" onClick={loadBookings}><i className="bi bi-arrow-clockwise"></i> Refresh bookings</button></section>{bookingError && <div className="admin-message error">{bookingError}</div>}<section className="admin-bookings-panel"><div className="admin-panel-title"><div><p className="admin-kicker">CUSTOMER ACTIVITY</p><h2>{bookings.length} booking{bookings.length === 1 ? '' : 's'}</h2></div><Link to="/" className="admin-cancel">Website</Link></div><div className="admin-booking-table">{bookings.length ? bookings.map((booking, index) => <article key={booking._id || index}><div className="booking-number">{String(index + 1).padStart(2, '0')}</div><div><strong>{booking.customerName}</strong><span>{booking.jobDescription}</span></div><div><strong>{booking.contact}</strong><span>{booking.address} · {booking.pincode}</span></div><span className={booking.matchedWorker ? 'booking-status assigned' : 'booking-status'}>{booking.matchedWorker ? `Assigned: ${booking.matchedWorker.name}` : 'Awaiting carpenter'}</span></article>) : <div className="admin-no-bookings"><i className="bi bi-inbox"></i><p>No bookings found yet.</p><button type="button" className="admin-primary" onClick={loadBookings}>Load bookings</button></div>}</div></section></div></main>;
+  }
+
   if (!loggedIn) {
-    return <main className="admin-page admin-login-page"><section className="admin-login-box"><div className="admin-brand-mark"><i className="bi bi-grid-1x2-fill"></i></div><p className="admin-kicker">FURNITURE KAAM WALLAH / CONTROL ROOM</p><h1>Welcome to your <span>admin panel.</span></h1><p>Manage your shopping products and customer bookings from one simple workspace.</p><form onSubmit={handleLogin}><label>User ID<input value={credentials.userId} onChange={event => setCredentials({ ...credentials, userId: event.target.value })} placeholder="Enter user ID" /></label><label>Password<input type="password" value={credentials.password} onChange={event => setCredentials({ ...credentials, password: event.target.value })} placeholder="Enter password" /></label><button type="submit" className="admin-primary"><i className="bi bi-arrow-right-circle"></i> Enter Admin Panel</button></form>{notice && <div className="admin-message error">{notice}</div>}<Link className="admin-back-link" to="/shopping"><i className="bi bi-arrow-left"></i> Back to shopping</Link></section></main>;
+    return <main className="admin-page admin-login-page"><section className="admin-login-box"><button type="button" className="admin-switch-module" onClick={() => setSelectedModule('')}><i className="bi bi-arrow-left"></i> Choose another workspace</button><p className="admin-kicker">FURNITURE KAAM WALLAH / {selectedModule === 'shopping' ? 'SHOPPING ADMIN' : 'WORK BOOKING ADMIN'}</p><h1>Admin <span>sign in.</span></h1><p>Enter any user ID and password for this temporary frontend-only panel.</p><form onSubmit={handleLogin}><label>User ID<input value={credentials.userId} onChange={event => setCredentials({ ...credentials, userId: event.target.value })} placeholder="Enter user ID" /></label><label>Password<input type="password" value={credentials.password} onChange={event => setCredentials({ ...credentials, password: event.target.value })} placeholder="Enter password" /></label><button type="submit" className="admin-primary"><i className="bi bi-arrow-right-circle"></i> Enter {selectedModule === 'shopping' ? 'Shopping' : 'Booking'} Admin</button></form>{notice && <div className="admin-message error">{notice}</div>}</section></main>;
   }
 
   const publishedCount = products.filter(item => item.published !== false).length;
