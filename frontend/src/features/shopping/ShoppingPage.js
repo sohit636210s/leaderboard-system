@@ -23,6 +23,16 @@ function ShoppingPage() {
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState(readProducts);
   const [catalogLoading, setCatalogLoading] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [buyProduct, setBuyProduct] = useState(null);
+  const [deliveryDetails, setDeliveryDetails] = useState({ address: '', pincode: '' });
+  const [availabilityMessage, setAvailabilityMessage] = useState('');
+  const [promoIndex, setPromoIndex] = useState(0);
+  const promotions = [
+    { title: 'Fresh furniture for every room', text: 'Beds, chairs, tables and custom home furniture.' },
+    { title: 'UPVC furniture, made for India', text: 'Low-maintenance cupboards and kitchen units.' },
+    { title: 'Need a custom size?', text: 'Call 63621074008 for 24-hour support.' }
+  ];
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/api/products`)
@@ -30,6 +40,11 @@ function ShoppingPage() {
       .catch(() => setProducts(readProducts()))
       .finally(() => setCatalogLoading(false));
   }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setPromoIndex(index => (index + 1) % promotions.length), 2000);
+    return () => window.clearInterval(timer);
+  }, [promotions.length]);
 
   useEffect(() => {
     const originalTitle = document.title;
@@ -71,9 +86,26 @@ function ShoppingPage() {
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
   const formatPrice = price => `₹${price.toLocaleString('en-IN')}`;
+  const checkAvailability = event => {
+    event.preventDefault();
+    const isValidPincode = /^\d{6}$/.test(deliveryDetails.pincode.trim());
+    if (!deliveryDetails.address.trim() || !isValidPincode) {
+      setAvailabilityMessage('Enter your complete address and a valid 6-digit pincode.');
+      return;
+    }
+    setAvailabilityMessage(buyProduct && buyProduct.available !== false && (buyProduct.stock ?? 0) > 0
+      ? `Available near pincode ${deliveryDetails.pincode}. We will contact you at 63621074008 to confirm the order.`
+      : 'This product is currently out of stock. Please call 63621074008 for alternatives.');
+  };
 
   return (
     <main className="shopping-page">
+      <header className="shopping-nav">
+        <Link to="/" className="shopping-brand"><img src="/images/logo.jpg" alt="Furniture Kaam Wallah" /><span>Furniture Kaam Wallah <small>SHOPPING</small></span></Link>
+        <nav><Link to="/shopping" className="active">Shop</Link><Link to="/#categories">Custom Furniture</Link><Link to="/contact">Contact</Link></nav>
+        <div className="shopping-nav-actions">{searchOpen && <input autoFocus value={search} onChange={event => setSearch(event.target.value)} placeholder="Search furniture" aria-label="Search furniture" />}<button type="button" className="shopping-icon-button" onClick={() => setSearchOpen(open => !open)} aria-label="Search"><i className="bi bi-search"></i></button><button type="button" className="shopping-cart-button" onClick={() => setCartOpen(true)}><i className="bi bi-bag"></i><span>Cart</span><b>{cartCount}</b></button></div>
+      </header>
+      <section className="shopping-promo"><div><i className="bi bi-stars"></i><strong>{promotions[promoIndex].title}</strong><span>{promotions[promoIndex].text}</span></div><span className="promo-dots">{promotions.map((promotion, index) => <i key={promotion.title} className={index === promoIndex ? 'active' : ''}></i>)}</span></section>
       {catalogLoading && <div className="shopping-loading">Loading furniture catalog...</div>}
       <section className="shopping-hero">
         <div className="shopping-container">
@@ -86,20 +118,21 @@ function ShoppingPage() {
             </div>
             <div className="shopping-support"><i className="bi bi-headset"></i><span>Need a custom size?<strong>Call 63621074008</strong></span></div>
           </div>
-          <div className="shopping-search-wrap"><i className="bi bi-search"></i><input value={search} onChange={event => setSearch(event.target.value)} placeholder="Search beds, chairs, tables, UPVC cupboards..." aria-label="Search products" /><button type="button" onClick={() => setCartOpen(true)}><i className="bi bi-bag"></i><span>Cart</span><b>{cartCount}</b></button></div>
+          <div className="shopping-search-wrap shopping-search-summary"><i className="bi bi-search"></i><span>{search || 'Search our furniture collection'}</span><button type="button" onClick={() => setSearchOpen(true)}>Search</button></div>
         </div>
       </section>
 
       <section className="shopping-container shopping-content">
         <div className="shopping-toolbar"><div className="shopping-categories">{categories.map(category => <button type="button" key={category} className={activeCategory === category ? 'active' : ''} onClick={() => setActiveCategory(category)}>{category}</button>)}</div><span>{filteredProducts.length} products</span></div>
         <div className="shopping-grid">
-          {filteredProducts.map(product => { const isAvailable = product.available !== false && (product.stock ?? 0) > 0; return <article className="product-card" key={product.id}><div className="product-image-wrap"><img src={product.image} alt={product.name} /><span>{product.category}</span></div><div className="product-card-body"><h2>{product.name}</h2><p>{product.description}</p><div className="product-stock">{isAvailable ? (product.stock <= 3 ? `Only ${product.stock} left` : 'In stock') : 'Out of stock'}</div><div className="product-buy"><strong>{formatPrice(product.price)}</strong><button type="button" disabled={!isAvailable} onClick={() => addToCart(product)}><i className="bi bi-plus-lg"></i> {isAvailable ? 'Add to cart' : 'Unavailable'}</button></div></div></article>; })}
+          {filteredProducts.map(product => { const isAvailable = product.available !== false && (product.stock ?? 0) > 0; return <article className="product-card" key={product.id}><div className="product-image-wrap"><img src={product.image} alt={product.name} /><span>{product.category}</span></div><div className="product-card-body"><h2>{product.name}</h2><p>{product.description}</p><div className="product-stock">{isAvailable ? (product.stock <= 3 ? `Only ${product.stock} left` : 'In stock') : 'Out of stock'}</div><div className="product-buy"><strong>{formatPrice(product.price)}</strong><button type="button" disabled={!isAvailable} onClick={() => addToCart(product)}><i className="bi bi-plus-lg"></i> {isAvailable ? 'Add to cart' : 'Unavailable'}</button><button type="button" className="product-buy-now" disabled={!isAvailable} onClick={() => { setBuyProduct(product); setAvailabilityMessage(''); }}>Buy now</button></div></div></article>; })}
         </div>
         {filteredProducts.length === 0 && <div className="shopping-empty"><i className="bi bi-search"></i><h2>No furniture found</h2><p>Try another product or category.</p></div>}
       </section>
 
       {cartOpen && <div className="cart-backdrop" onClick={() => setCartOpen(false)}></div>}
       <aside className={`cart-drawer ${cartOpen ? 'open' : ''}`} aria-label="Shopping cart"><div className="cart-heading"><div><p>YOUR CART</p><h2>Ready to order?</h2></div><button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart"><i className="bi bi-x-lg"></i></button></div>{cart.length === 0 ? <div className="cart-empty"><i className="bi bi-bag"></i><p>Your cart is empty.</p><span>Add a piece you love to get started.</span></div> : <><div className="cart-items">{cart.map(item => <div className="cart-item" key={item.id}><img src={item.image} alt="" /><div><strong>{item.name}</strong><span>{formatPrice(item.price)}</span><div className="quantity"><button type="button" onClick={() => changeQuantity(item.id, -1)}>-</button><b>{item.quantity}</b><button type="button" onClick={() => changeQuantity(item.id, 1)}>+</button></div></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{formatPrice(cartTotal)}</strong></div><a href="tel:63621074008" className="cart-order"><i className="bi bi-telephone"></i> Call to order</a></>}</aside>
+      {buyProduct && <div className="buy-modal-backdrop" onClick={() => setBuyProduct(null)}><section className="buy-modal" onClick={event => event.stopPropagation()}><button type="button" className="buy-modal-close" onClick={() => setBuyProduct(null)} aria-label="Close"><i className="bi bi-x-lg"></i></button><p className="shopping-kicker">CHECK DELIVERY AVAILABILITY</p><h2>{buyProduct.name}</h2><p>Enter your delivery details and we will confirm availability near you.</p><form onSubmit={checkAvailability}><label>Address<textarea value={deliveryDetails.address} onChange={event => setDeliveryDetails({ ...deliveryDetails, address: event.target.value })} rows="3" placeholder="House, street and city" required /></label><label>Pincode<input value={deliveryDetails.pincode} onChange={event => setDeliveryDetails({ ...deliveryDetails, pincode: event.target.value })} inputMode="numeric" maxLength="6" placeholder="6-digit pincode" required /></label><button className="admin-primary" type="submit"><i className="bi bi-geo-alt"></i> Check availability</button></form>{availabilityMessage && <div className="availability-message">{availabilityMessage}</div>}</section></div>}
     </main>
   );
 }
