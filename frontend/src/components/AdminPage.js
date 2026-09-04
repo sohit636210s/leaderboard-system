@@ -31,7 +31,23 @@ function AdminPage() {
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/api/products?admin=true`)
-      .then(response => setProducts(response.data))
+      .then(async response => {
+        if (response.data.length > 0) {
+          setProducts(response.data);
+          return;
+        }
+
+        const localProducts = loadProducts();
+        const migratedProducts = await Promise.all(localProducts.map(localProduct => {
+          const productData = { ...localProduct };
+          delete productData.id;
+          delete productData._id;
+          return axios.post(`${API_BASE_URL}/api/products`, productData).then(result => result.data);
+        }));
+        setProducts(migratedProducts);
+        localStorage.setItem(PRODUCT_KEY, JSON.stringify(migratedProducts));
+        setNotice(migratedProducts.length ? 'Your local products were synced to the shared catalog.' : 'Shared catalog is ready.');
+      })
       .catch(() => setNotice('Could not load shared products. Local products are shown.'));
   }, []);
 
