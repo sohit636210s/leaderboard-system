@@ -71,7 +71,8 @@ exports.loginWorker = async (req, res) => {
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
     if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET not set in env');
+      console.error('❌ Worker login unavailable: JWT_SECRET is not configured');
+      return res.status(503).json({ error: 'Worker login is temporarily unavailable. Please contact support.' });
     }
 
     const token = jwt.sign({ workerId: worker._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
