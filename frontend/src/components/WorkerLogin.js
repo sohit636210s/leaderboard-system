@@ -26,7 +26,7 @@ function WorkerLogin({ setWorker }) {
       navigate('/'); // ✅ Redirect to HomePage
 
     } catch (err) {
-      const msg = err.response?.data?.error || 'Login failed!';
+      const msg = err.response?.data?.error || 'Login failed. Please check your email and password.';
       setErrorMsg(msg); // ❌ Show error above form
     }
   };

@@ -25,9 +25,6 @@ exports.registerWorker = async (req, res) => {
       return res.status(409).json({ error: 'This phone number is already registered. Please use another number or log in.' });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     // ✅ Safe photo handling
     let photoFile = null;
     if (req.file && req.file.filename) {
@@ -40,7 +37,7 @@ exports.registerWorker = async (req, res) => {
     const worker = new Worker({
       name,
       email: email.trim().toLowerCase(),
-      password: hashedPassword,
+      password,
       contact: contact.trim(),
       address,
       pincode,
@@ -51,7 +48,9 @@ exports.registerWorker = async (req, res) => {
     await worker.save();
     console.log('✅ Worker saved:', worker._id);
 
-    res.status(201).json({ message: 'Worker registered successfully', worker });
+    const workerResponse = worker.toObject();
+    delete workerResponse.password;
+    res.status(201).json({ message: 'Worker registered successfully', worker: workerResponse });
   } catch (error) {
     console.error('❌ Registration failed:', error.message);
     res.status(500).json({ error: 'Registration failed', details: error.message });
@@ -62,9 +61,10 @@ exports.registerWorker = async (req, res) => {
 exports.loginWorker = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('🔐 Login attempt:', email);
+    const normalizedEmail = email?.trim().toLowerCase();
+    console.log('🔐 Login attempt:', normalizedEmail);
 
-    const worker = await Worker.findOne({ email });
+    const worker = await Worker.findOne({ email: normalizedEmail });
     if (!worker) return res.status(404).json({ error: 'Worker not found' });
 
     const isMatch = await bcrypt.compare(password, worker.password);
@@ -76,7 +76,9 @@ exports.loginWorker = async (req, res) => {
 
     const token = jwt.sign({ workerId: worker._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
-    res.json({ message: 'Login successful', token, worker });
+    const workerResponse = worker.toObject();
+    delete workerResponse.password;
+    res.json({ message: 'Login successful', token, worker: workerResponse });
   } catch (error) {
     console.error('❌ Login error:', error.message);
     res.status(500).json({ error: 'Login error', details: error.message });
