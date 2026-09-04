@@ -6,15 +6,15 @@ body {
 }
 
 .home-page { background: #f7f4ef; }
-.site-navbar { border-bottom: 2px solid #0d6efd; z-index: 1050; min-height: 58px; padding-top: .25rem !important; padding-bottom: .25rem !important; }
+.site-navbar { border-bottom: 1px solid #2ec65e; z-index: 1050; min-height: 58px; padding-top: .25rem !important; padding-bottom: .25rem !important; background: linear-gradient(100deg, #17211c 0%, #202c26 62%, #3b171b 100%) !important; box-shadow: 0 3px 14px #17211c3d; }
 .app-content-offset { padding-top: 58px; }
-.site-brand { flex: 0 0 auto; }.site-brand img { width: 36px; height: 36px; margin-right: 8px; border: 2px solid #18dd39; border-radius: 50%; object-fit: cover; }.site-brand span { color: #ffc107; font-size: 1.08rem; font-weight: 700; white-space: nowrap; }.nav-shell { flex: 1 1 auto; min-width: 0; display: flex !important; align-items: center; }.desktop-nav-list { flex: 1 1 auto; flex-direction: row; align-items: center; justify-content: center; gap: .1rem; margin: 0; }.desktop-nav-list .nav-link { padding: .45rem .55rem; white-space: nowrap; font-size: .88rem; }.desktop-nav-list .nav-link:hover { color: #2ec65e; }.navbar-actions { flex: 0 0 auto; gap: .25rem; }.navbar-actions .btn, .desktop-quote { padding: .4rem .6rem; font-size: .78rem; }.desktop-quote { margin-left: .25rem; white-space: nowrap; }.mobile-menu-toggle { display: none; }
+.site-brand { flex: 0 0 auto; }.site-brand img { width: 36px; height: 36px; margin-right: 8px; border: 2px solid #18dd39; border-radius: 50%; object-fit: cover; }.site-brand span { color: #ffc107; font-size: 1.08rem; font-weight: 700; white-space: nowrap; }.nav-shell { flex: 1 1 auto; min-width: 0; display: flex !important; align-items: center; }.desktop-nav-list { flex: 1 1 auto; flex-direction: row; align-items: center; justify-content: center; gap: .1rem; margin: 0; }.desktop-nav-list .nav-link { padding: .42rem .55rem; border: 1px solid transparent; border-radius: 4px; white-space: nowrap; color: #d7e2dc; font-size: .88rem; transition: color .2s ease, background-color .2s ease, border-color .2s ease; }.desktop-nav-list .nav-link:hover, .desktop-nav-list .nav-link:focus { color: #fff; background: #2ec65e24; border-color: #2ec65e66; }.navbar-actions { flex: 0 0 auto; gap: .25rem; }.navbar-actions .btn, .desktop-quote { padding: .4rem .6rem; font-size: .78rem; }.desktop-quote { margin-left: .25rem; white-space: nowrap; }.mobile-menu-toggle { display: none; }
 .navbar-collapse { display: flex; align-items: center; }
 .drawer-close, .drawer-quote, .drawer-backdrop { display: none; }
 .mobile-nav-links { display: none; }
 @media (min-width: 992px) {
-  .site-navbar { flex-wrap: nowrap; }
-  .site-navbar .nav-shell { flex-basis: auto; width: auto; }
+  .site-navbar { flex-wrap: nowrap; height: 58px; }
+  .site-navbar .nav-shell { flex: 1 1 auto; flex-basis: auto; width: auto; flex-direction: row; }
   .site-navbar .drawer-quote { display: none !important; }
 }
 .hero-section { background: radial-gradient(circle at 80% 20%, #e5efdf 0, #f7f4ef 42%); padding-top: 2rem; }
