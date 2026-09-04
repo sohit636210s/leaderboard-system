@@ -3,3 +3,4 @@ User-agent: *
 Disallow:
 
 Sitemap: https://kaamwallah.in/sitemap.xml
+Sitemap: https://kaamwallah.in/shopping-sitemap.xml

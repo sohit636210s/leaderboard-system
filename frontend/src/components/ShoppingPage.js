@@ -1,15 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import shoppingCatalog from '../shoppingCatalog';
+import API_BASE_URL from '../api';
 
 const STORAGE_KEY = 'kaamwallah_shopping_products';
 
 function readProducts() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved : shoppingCatalog;
+    const products = Array.isArray(saved) ? saved : shoppingCatalog;
+    return products.map(product => ({ ...product, stock: product.stock ?? 10, available: product.available !== false }));
   } catch (error) {
-    return shoppingCatalog;
+    return shoppingCatalog.map(product => ({ ...product, stock: product.stock ?? 10, available: true }));
   }
 }
 
@@ -18,7 +21,28 @@ function ShoppingPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [products] = useState(readProducts);
+  const [products, setProducts] = useState(readProducts);
+  const [catalogLoading, setCatalogLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/api/products`)
+      .then(response => setProducts(response.data))
+      .catch(() => setProducts(readProducts()))
+      .finally(() => setCatalogLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const originalTitle = document.title;
+    const description = document.querySelector('meta[name="description"]');
+    const originalDescription = description?.getAttribute('content');
+    document.title = 'Furniture Shopping India | Beds, Tables, Chairs & UPVC Furniture | Kaam Wallah';
+    description?.setAttribute('content', 'Shop ready-made beds, palang, chairs, tables, bedroom furniture, kitchen units and UPVC cupboards from Furniture Kaam Wallah. Call 63621074008 for custom furniture work.');
+
+    return () => {
+      document.title = originalTitle;
+      if (description && originalDescription) description.setAttribute('content', originalDescription);
+    };
+  }, []);
 
   const publishedProducts = useMemo(() => products.filter(product => product.published !== false), [products]);
   const categories = ['All', ...new Set(publishedProducts.map(product => product.category))];
@@ -29,8 +53,10 @@ function ShoppingPage() {
   }), [activeCategory, search, publishedProducts]);
 
   const addToCart = product => {
+    if (product.available === false || (product.stock ?? 0) < 1) return;
     setCart(previous => {
       const existing = previous.find(item => item.id === product.id);
+      if (existing && existing.quantity >= (product.stock ?? 0)) return previous;
       if (existing) return previous.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
       return [...previous, { ...product, quantity: 1 }];
     });
@@ -48,6 +74,7 @@ function ShoppingPage() {
 
   return (
     <main className="shopping-page">
+      {catalogLoading && <div className="shopping-loading">Loading furniture catalog...</div>}
       <section className="shopping-hero">
         <div className="shopping-container">
           <div className="shopping-breadcrumb"><Link to="/">Furniture Kaam Wallah</Link><span>/</span> Shopping</div>
@@ -66,7 +93,7 @@ function ShoppingPage() {
       <section className="shopping-container shopping-content">
         <div className="shopping-toolbar"><div className="shopping-categories">{categories.map(category => <button type="button" key={category} className={activeCategory === category ? 'active' : ''} onClick={() => setActiveCategory(category)}>{category}</button>)}</div><span>{filteredProducts.length} products</span></div>
         <div className="shopping-grid">
-          {filteredProducts.map(product => <article className="product-card" key={product.id}><div className="product-image-wrap"><img src={product.image} alt={product.name} /><span>{product.category}</span></div><div className="product-card-body"><h2>{product.name}</h2><p>{product.description}</p><div className="product-buy"><strong>{formatPrice(product.price)}</strong><button type="button" onClick={() => addToCart(product)}><i className="bi bi-plus-lg"></i> Add to cart</button></div></div></article>)}
+          {filteredProducts.map(product => { const isAvailable = product.available !== false && (product.stock ?? 0) > 0; return <article className="product-card" key={product.id}><div className="product-image-wrap"><img src={product.image} alt={product.name} /><span>{product.category}</span></div><div className="product-card-body"><h2>{product.name}</h2><p>{product.description}</p><div className="product-stock">{isAvailable ? (product.stock <= 3 ? `Only ${product.stock} left` : 'In stock') : 'Out of stock'}</div><div className="product-buy"><strong>{formatPrice(product.price)}</strong><button type="button" disabled={!isAvailable} onClick={() => addToCart(product)}><i className="bi bi-plus-lg"></i> {isAvailable ? 'Add to cart' : 'Unavailable'}</button></div></div></article>; })}
         </div>
         {filteredProducts.length === 0 && <div className="shopping-empty"><i className="bi bi-search"></i><h2>No furniture found</h2><p>Try another product or category.</p></div>}
       </section>

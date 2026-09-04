@@ -24,10 +24,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const bookingRoutes = require('./routes/bookingRoutes');
 const workerRoutes = require('./routes/workerRoutes');
 const customerRoutes = require('./routes/customerRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 app.use('/api/bookings', bookingRoutes);      // 🔨 Booking APIs
 app.use('/api/workers', workerRoutes);        // 👷 Worker APIs
 app.use('/api/customers', customerRoutes);    // 🧑‍💼 Customer APIs
+app.use('/api/products', productRoutes);      // 🛍️ Shopping catalog APIs
 
 // 🚪 Root route — for browser or Render base URL test
 app.get('/', (req, res) => {
