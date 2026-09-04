@@ -16,7 +16,7 @@ function HomePage() {
   useEffect(() => {
     const timer = window.setInterval(() => setWorkSpotlight(index => (index + 1) % WORK_HIGHLIGHTS.length), 2000);
     return () => window.clearInterval(timer);
-  }, [workHighlights.length]);
+  }, []);
 
   const categories = [
     { name: 'Modular Kitchen', icon: 'bi-grid-3x3-gap-fill', image: 'modular-kitchen.jpg' },
