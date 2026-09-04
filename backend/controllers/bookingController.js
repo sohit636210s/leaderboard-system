@@ -16,8 +16,9 @@ const createBooking = async (req, res) => {
     });
     await newBooking.save();
 
-    // 2️⃣ Match a worker by pincode
-    const matchedWorker = await Worker.findOne({ pincode });
+    // 2️⃣ Find every available carpenter serving the customer's pincode
+    const availableWorkers = await Worker.find({ pincode, isAvailable: true, skill: 'Carpenter' });
+    const matchedWorker = availableWorkers[0] || null;
 
     // 3️⃣ Assign worker if found
     if (matchedWorker) {
@@ -33,12 +34,21 @@ const createBooking = async (req, res) => {
       message: '✅ Booking saved successfully',
       matchedWorker: matchedWorker
         ? {
+        _id: matchedWorker._id,
             name: matchedWorker.name,
             contact: matchedWorker.contact,
             city: matchedWorker.city,
             pincode: matchedWorker.pincode
           }
-        : null
+        : null,
+      availableWorkers: availableWorkers.map(worker => ({
+        _id: worker._id,
+        name: worker.name,
+        contact: worker.contact,
+        city: worker.city,
+        pincode: worker.pincode,
+        verified: worker.verified
+      }))
     });
   } catch (error) {
     console.error('❌ Booking error:', error.message);

@@ -18,18 +18,18 @@ function HomePage() {
       <main className="dashboard-shell">
         <section className="dashboard-intro">
           <div>
-            <p className="dashboard-kicker"><span className="live-dot"></span> FKW WORKSPACE / PATNA</p>
-            <h1>Let's build <span>something beautiful.</span></h1>
-            <p className="dashboard-subtitle">Track your space transformation and find the right craft for your next project.</p>
+            <p className="dashboard-kicker"><span className="live-dot"></span> FURNITURE KAAM WALLAH / PATNA</p>
+            <h1>Build your space <span>beautifully.</span></h1>
+            <p className="dashboard-subtitle">Custom wardrobes, modular kitchens, bedrooms, halls and UPVC cupboards, made by trusted furniture professionals.</p>
           </div>
-          <button className="dashboard-primary" type="button" onClick={() => openEstimate()}><i className="bi bi-plus-lg"></i> Start a project</button>
+          <button className="dashboard-primary" type="button" onClick={() => openEstimate()}><i className="bi bi-calendar2-check"></i> Book your work</button>
         </section>
 
         <section className="metric-grid" aria-label="Workspace summary">
           <article className="metric-card"><div className="metric-icon green"><i className="bi bi-check2-circle"></i></div><p>Projects completed</p><strong>128</strong><span className="metric-up"><i className="bi bi-arrow-up"></i> 12.8% this year</span></article>
           <article className="metric-card"><div className="metric-icon red"><i className="bi bi-lightning-charge-fill"></i></div><p>Average response</p><strong>24<span>h</span></strong><span className="metric-up"><i className="bi bi-arrow-down"></i> 8h faster</span></article>
           <article className="metric-card"><div className="metric-icon dark"><i className="bi bi-star-fill"></i></div><p>Craft quality score</p><strong>4.9<span>/5</span></strong><span className="metric-neutral">From 86 verified reviews</span></article>
-          <article className="metric-card metric-callout"><p>Have a space in mind?</p><strong>Turn the idea into a plan.</strong><button type="button" onClick={() => openEstimate()}>Get a free estimate <i className="bi bi-arrow-up-right"></i></button></article>
+          <article className="metric-card metric-callout"><p>Have a space in mind?</p><strong>Tell us what you want to build.</strong><button type="button" onClick={() => openEstimate()}>Book now <i className="bi bi-arrow-up-right"></i></button></article>
         </section>
 
         <div className="dashboard-grid">
@@ -40,7 +40,7 @@ function HomePage() {
           </section>
 
           <section className="workspace-panel category-panel" id="categories" aria-labelledby="category-heading">
-            <div className="panel-heading"><div><p className="panel-label">EXPLORE SERVICES</p><h2 id="category-heading">Choose your craft</h2></div><span className="panel-index">01—04</span></div>
+            <div className="panel-heading"><div><p className="panel-label">OUR FURNITURE SERVICES</p><h2 id="category-heading">Choose your work</h2></div><span className="panel-index">01—04</span></div>
             <div className="craft-list">{categories.map((category, index) => <button type="button" className={`craft-item ${selectedCategory === category.name ? 'selected' : ''}`} key={category.name} onClick={() => setSelectedCategory(category.name)}><span className="craft-number">0{index + 1}</span><span className="craft-icon"><i className={`bi ${category.icon}`}></i></span><span className="craft-name">{category.name}</span><i className="bi bi-arrow-up-right craft-arrow"></i></button>)}</div>
             <button className="panel-link" type="button" onClick={() => openEstimate()}>{selectedCategory} selected <i className="bi bi-arrow-right"></i></button>
           </section>
@@ -50,7 +50,7 @@ function HomePage() {
             <div className="job-table"><div className="job-row"><div className="job-thumb wardrobe-thumb"></div><div className="job-detail"><strong>UPVC wardrobe</strong><span>Sharma residence · Aug 2024</span></div><span className="job-status complete">Completed</span><i className="bi bi-chevron-right"></i></div><div className="job-row"><div className="job-thumb kitchen-thumb"></div><div className="job-detail"><strong>Modular kitchen</strong><span>Gupta apartment · Jul 2024</span></div><span className="job-status review">In review</span><i className="bi bi-chevron-right"></i></div><div className="job-row"><div className="job-thumb sofa-thumb"></div><div className="job-detail"><strong>Custom sofa set</strong><span>Verma residence · Jun 2024</span></div><span className="job-status complete">Completed</span><i className="bi bi-chevron-right"></i></div></div>
           </section>
 
-          <aside className="workspace-panel next-panel"><div className="next-pattern"></div><p className="panel-label">NEXT BEST STEP</p><div className="next-content"><span className="next-icon"><i className="bi bi-chat-square-heart-fill"></i></span><h2>Start with a conversation.</h2><p>Tell us what you are imagining. We will shape the details together.</p><button className="dashboard-primary" type="button" onClick={() => openEstimate()}>Book a consultation <i className="bi bi-arrow-up-right"></i></button></div></aside>
+          <aside className="workspace-panel next-panel"><div className="next-pattern"></div><p className="panel-label">BOOK YOUR FURNITURE WORK</p><div className="next-content"><span className="next-icon"><i className="bi bi-chat-square-heart-fill"></i></span><h2>Let us build it for you.</h2><p>Book a carpenter online or call us 24 hours a day.</p><a href="tel:63621074008" className="next-phone"><i className="bi bi-telephone-fill"></i> 63621074008</a><button className="dashboard-primary" type="button" onClick={() => openEstimate()}>Book now <i className="bi bi-arrow-up-right"></i></button></div></aside>
         </div>
       </main>
 
@@ -59,7 +59,7 @@ function HomePage() {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title fw-bold">Book a Carpenter</h5>
+                <h5 className="modal-title fw-bold">Book Furniture Work</h5>
                 <button type="button" className="btn-close" onClick={() => setShowBookingModal(false)}></button>
               </div>
               <div className="modal-body">

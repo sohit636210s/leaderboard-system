@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../api';
 
 function BookingForm() {
   const [formData, setFormData] = useState({
@@ -10,10 +11,8 @@ function BookingForm() {
     jobDescription: ''
   });
 
-  const [matchedWorker, setMatchedWorker] = useState(null);
+  const [availableWorkers, setAvailableWorkers] = useState([]);
   const [submissionMessage, setSubmissionMessage] = useState('');
-
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -25,12 +24,12 @@ function BookingForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${backendURL}/api/bookings/book`, formData);
-      setMatchedWorker(res.data.matchedWorker);
+      const res = await axios.post(`${API_BASE_URL}/api/bookings/book`, formData);
+      setAvailableWorkers(res.data.availableWorkers || (res.data.matchedWorker ? [res.data.matchedWorker] : []));
       setSubmissionMessage(
-        res.data.matchedWorker
-          ? '✅ Booking submitted! Nearest worker found below.'
-          : '✅ Booking submitted, but no nearby worker is available.'
+        res.data.availableWorkers?.length || res.data.matchedWorker
+          ? 'Booking submitted. Available carpenters near your pincode are shown below.'
+          : 'Booking submitted, but no available carpenter was found near your pincode.'
       );
     } catch (err) {
       console.error('Booking failed:', err.message);
@@ -62,7 +61,7 @@ function BookingForm() {
         </div>
         <h3 className="text-center mb-3 fw-bold" style={{ color: '#dc3545' }}>
           <i className="bi bi-hammer me-2" style={{ fontSize: '1.5rem' }}></i>
-          Book a Carpenter
+          Book Furniture Work
         </h3>
         <form onSubmit={handleSubmit}>
           {/* 👤 Name */}
@@ -159,7 +158,7 @@ function BookingForm() {
                 border: '2px solid #dc3545',
                 boxShadow: '0 0 5px rgba(220,53,69,0.3)'
               }}
-              placeholder="Describe the work needed"
+              placeholder="Wardrobe, kitchen, bedroom, hall, furniture or UPVC cupboard work"
               rows={3}
               required
             />
@@ -178,21 +177,21 @@ function BookingForm() {
         </form>              
 
         {submissionMessage && (
-          <div className="mt-4 alert alert-info text-center">
+          <div className="mt-4 alert alert-success text-center">
             {submissionMessage}
           </div>
         )}
 
-        {matchedWorker && (
+        {availableWorkers.length > 0 && (
           <div className="mt-2 alert alert-success">
-            <h5>
-              <i className="bi bi-person-check-fill me-2" style={{ color: '#198754' }}></i>
-              Nearest Worker Found:
-            </h5>
-            <p><strong>Name:</strong> {matchedWorker.name}</p>
-            <p><strong>City:</strong> {matchedWorker.city}</p>
-            <p><strong>Pincode:</strong> {matchedWorker.pincode}</p>
-            <p><strong>Contact:</strong> {matchedWorker.contact}</p>
+            <h5><i className="bi bi-person-check-fill me-2"></i>Available carpenters near you</h5>
+            {availableWorkers.map((worker) => (
+              <div key={worker._id || worker.contact} className="border-top pt-2 mt-2">
+                <p className="mb-1"><strong>{worker.name}</strong> {worker.verified ? <span className="badge text-bg-success ms-2">Verified</span> : null}</p>
+                <p className="mb-1">{worker.city || 'Nearby'} · Pincode {worker.pincode}</p>
+                <a href={`tel:${worker.contact}`} className="fw-bold text-success">Call {worker.contact}</a>
+              </div>
+            ))}
           </div>
         )}
       </div>
