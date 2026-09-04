@@ -15,9 +15,14 @@ exports.registerWorker = async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const existing = await Worker.findOne({ email });
-    if (existing) {
-      return res.status(409).json({ error: 'Email already registered' });
+    const existingEmail = await Worker.findOne({ email: email.trim().toLowerCase() });
+    if (existingEmail) {
+      return res.status(409).json({ error: 'This email is already registered. Please use another email or log in.' });
+    }
+
+    const existingContact = await Worker.findOne({ contact: contact.trim() });
+    if (existingContact) {
+      return res.status(409).json({ error: 'This phone number is already registered. Please use another number or log in.' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -34,9 +39,9 @@ exports.registerWorker = async (req, res) => {
 
     const worker = new Worker({
       name,
-      email,
+      email: email.trim().toLowerCase(),
       password: hashedPassword,
-      contact,
+      contact: contact.trim(),
       address,
       pincode,
       skill,

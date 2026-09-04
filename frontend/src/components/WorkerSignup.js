@@ -42,7 +42,7 @@ function WorkerSignup() {
       });
       setRegisteredWorker(res.data.worker || formData);
     } catch (err) {
-      const errorMsg = err.response?.data?.details || err.response?.data?.error || 'Registration failed';
+      const errorMsg = err.response?.data?.error || 'Registration failed. Please try again.';
       setErrorMsg(errorMsg);
       console.error('Registration error:', err);
     }
