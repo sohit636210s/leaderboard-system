@@ -6,10 +6,8 @@ import ContactPage from './components/ContactPage';
 import AboutPage from './components/AboutPage';
 import BookingForm from './components/BookingForm';
 import WorkerSignup from './components/WorkerSignup';
-import CustomerSignup from './components/CustomerSignup';
 import WorkerLogin from './components/WorkerLogin';
 import CustomerLogin from './components/CustomerLogin';
-import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
 import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
@@ -79,9 +77,8 @@ function AppContent() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/admin/customers" element={<AdminCustomerList />} />
           <Route path="/admin/bookings" element={<AdminBookingList />} />
-          <Route path="/signup" element={<SignupSelector />} />
+          <Route path="/signup" element={<WorkerSignup />} />
           <Route path="/worker-signup" element={<WorkerSignup />} />
-          <Route path="/customer-signup" element={<CustomerSignup />} />
           <Route
             path="/worker-login"
             element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />}
