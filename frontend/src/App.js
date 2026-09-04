@@ -14,6 +14,7 @@ import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
 import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
 import ShoppingPage from './components/ShoppingPage';
+import ShoppingAdmin from './components/ShoppingAdmin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -69,6 +70,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shopping" element={<ShoppingPage />} />
+          <Route path="/admin" element={<ShoppingAdmin />} />
           <Route path="/booking" element={<BookingForm />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />

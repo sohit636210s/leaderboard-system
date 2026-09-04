@@ -2,18 +2,31 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import shoppingCatalog from '../shoppingCatalog';
 
+const STORAGE_KEY = 'kaamwallah_shopping_products';
+
+function readProducts() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return Array.isArray(saved) ? saved : shoppingCatalog;
+  } catch (error) {
+    return shoppingCatalog;
+  }
+}
+
 function ShoppingPage() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [products] = useState(readProducts);
 
-  const categories = ['All', ...new Set(shoppingCatalog.map(product => product.category))];
-  const filteredProducts = useMemo(() => shoppingCatalog.filter(product => {
+  const publishedProducts = products.filter(product => product.published !== false);
+  const categories = ['All', ...new Set(publishedProducts.map(product => product.category))];
+  const filteredProducts = useMemo(() => publishedProducts.filter(product => {
     const matchesCategory = activeCategory === 'All' || product.category === activeCategory;
     const searchText = `${product.name} ${product.category} ${product.description}`.toLowerCase();
     return matchesCategory && searchText.includes(search.toLowerCase());
-  }), [activeCategory, search]);
+  }), [activeCategory, search, products]);
 
   const addToCart = product => {
     setCart(previous => {
