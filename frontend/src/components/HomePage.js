@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import BookingForm from './BookingForm';
+import { Link, useNavigate } from 'react-router-dom';
 
 const WORK_HIGHLIGHTS = [
   { title: 'Carpenter work near Patna', text: 'Wardrobe fitting and custom furniture in progress.', image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=240&q=80' },
@@ -9,9 +8,9 @@ const WORK_HIGHLIGHTS = [
 ];
 
 function HomePage() {
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Modular Kitchen');
   const [workSpotlight, setWorkSpotlight] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = window.setInterval(() => setWorkSpotlight(index => (index + 1) % WORK_HIGHLIGHTS.length), 2000);
@@ -24,7 +23,7 @@ function HomePage() {
     { name: 'King Size Bed', icon: 'bi-moon-stars-fill', image: 'king-size-bed.jpg' },
     { name: 'Wardrobe', icon: 'bi-box-seam-fill', image: 'upvc-wardrobe.jpg' }
   ];
-  const openEstimate = (category = selectedCategory) => { setSelectedCategory(category); setShowBookingModal(true); };
+  const openEstimate = (category = selectedCategory) => { setSelectedCategory(category); navigate('/booking', { state: { service: category } }); };
 
   return (
     <div className="dashboard-page">
@@ -72,22 +71,6 @@ function HomePage() {
           <aside className="workspace-panel next-panel"><div className="next-pattern"></div><p className="panel-label">BOOK YOUR FURNITURE WORK</p><div className="next-content"><span className="next-icon"><i className="bi bi-chat-square-heart-fill"></i></span><h2>Let us build it for you.</h2><p>Book a carpenter online or call us 24 hours a day.</p><a href="tel:63621074008" className="next-phone"><i className="bi bi-telephone-fill"></i> 63621074008</a><button className="dashboard-primary" type="button" onClick={() => openEstimate()}>Book now <i className="bi bi-arrow-up-right"></i></button></div></aside>
         </div>
       </main>
-
-      {showBookingModal && (
-        <div className="modal d-block dashboard-modal" tabIndex="-1" role="dialog" aria-modal="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title fw-bold">Book Furniture Work</h5>
-                <button type="button" className="btn-close" onClick={() => setShowBookingModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <BookingForm />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <footer className="dashboard-footer official-footer"><div className="official-footer-brand">Furniture Kaam Wallah <small>Custom furniture, wardrobes, kitchens and UPVC interiors.</small></div><nav><Link to="/">Home</Link><Link to="/about">About Us</Link><Link to="/shopping">Shopping</Link><Link to="/contact">Contact</Link><Link to="/booking">Book Furniture Work</Link><a href="tel:63621074008">Call 63621074008</a></nav><div className="official-footer-bottom">Patna, Bihar <span>•</span> Available 24 hours <span>•</span> <small>© {new Date().getFullYear()} Furniture Kaam Wallah</small></div></footer>
     </div>
