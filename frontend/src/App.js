@@ -13,8 +13,8 @@ import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
 import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
-import ShoppingPage from './components/ShoppingPage';
-import AdminPage from './components/AdminPage';
+import ShoppingPage from './features/shopping/ShoppingPage';
+import AdminPage from './features/admin/AdminPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 

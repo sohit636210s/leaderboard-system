@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import shoppingCatalog from '../shoppingCatalog';
-import API_BASE_URL from '../api';
+import shoppingCatalog from './shoppingCatalog';
+import API_BASE_URL from '../../api';
 
 const STORAGE_KEY = 'kaamwallah_shopping_products';
 
