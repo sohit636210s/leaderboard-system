@@ -20,7 +20,7 @@ function ShoppingPage() {
   const [cartOpen, setCartOpen] = useState(false);
   const [products] = useState(readProducts);
 
-  const publishedProducts = products.filter(product => product.published !== false);
+  const publishedProducts = useMemo(() => products.filter(product => product.published !== false), [products]);
   const categories = ['All', ...new Set(publishedProducts.map(product => product.category))];
   const filteredProducts = useMemo(() => publishedProducts.filter(product => {
     const matchesCategory = activeCategory === 'All' || product.category === activeCategory;
