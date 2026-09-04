@@ -13,6 +13,7 @@ import SignupSelector from './components/SignupSelector';
 import AdminCustomerList from './components/AdminCustomerList';
 import AdminBookingList from './components/AdminBookingList';
 import WorkerDashboard from './components/WorkerDashboard'; // ✅ Added new component
+import ShoppingPage from './components/ShoppingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -67,6 +68,7 @@ function AppContent() {
       <div className="app-content-offset">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/shopping" element={<ShoppingPage />} />
           <Route path="/booking" element={<BookingForm />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />

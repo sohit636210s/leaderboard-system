@@ -60,6 +60,7 @@ function Navbar({ worker, handleLogout }) {
           <li><Link to="/booking" onClick={closeMenu}><i className="bi bi-calendar-check-fill"></i>Booking</Link></li>
           <li><Link to="/contact" onClick={closeMenu}><i className="bi bi-telephone-fill"></i>Contact Us</Link></li>
           <li><Link to="/admin/bookings" onClick={closeMenu}><i className="bi bi-journal-text"></i>All Bookings</Link></li>
+          <li><Link to="/shopping" onClick={closeMenu}><i className="bi bi-bag-heart-fill"></i>Furniture Shopping</Link></li>
           <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-bag-heart-fill"></i>Shop Furniture</Link></li>
           <li><Link to="/#upvc-services" onClick={closeMenu}><i className="bi bi-grid-3x3-gap-fill"></i>UPVC Modern Kitchen</Link></li>
           <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-moon-stars-fill"></i>Luxury Bedroom</Link></li>
@@ -72,6 +73,9 @@ function Navbar({ worker, handleLogout }) {
           <a href="/#categories" className="btn btn-warning fw-bold shop-cta desktop-action me-2" onClick={closeMenu}>
             <i className="bi bi-bag-heart me-1"></i>Shop Furniture
           </a>
+          <Link to="/shopping" className="btn btn-outline-warning desktop-action me-2" onClick={closeMenu}>
+            <i className="bi bi-shop me-1"></i>Shopping
+          </Link>
           {worker ? (
             <>
               <div className="d-flex align-items-center me-3" style={{ cursor: 'pointer' }} onClick={goToDashboard}>
