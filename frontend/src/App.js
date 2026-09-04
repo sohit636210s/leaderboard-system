@@ -65,7 +65,7 @@ function AppContent() {
         </div>
       )}
 
-      <div style={{ paddingTop: '70px' }}>
+      <div className="app-content-offset">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking" element={<BookingForm />} />
