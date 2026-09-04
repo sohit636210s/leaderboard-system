@@ -33,7 +33,10 @@ function BookingForm() {
       );
     } catch (err) {
       console.error('Booking failed:', err.message);
-      setSubmissionMessage('❌ Booking failed. Please try again later.');
+      const serverMessage = err.response?.data?.error || err.response?.data?.message;
+      setSubmissionMessage(serverMessage
+        ? `Booking failed: ${serverMessage}`
+        : 'Booking failed because the server could not be reached. Please call 63621074008 (24 hours).');
     }
   };
 
