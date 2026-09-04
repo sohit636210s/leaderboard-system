@@ -82,26 +82,6 @@ function AdminPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const toggleProductAvailability = async item => {
-    try {
-      const response = await axios.put(`${API_BASE_URL}/api/products/${item.id}`, { ...item, available: !(item.available !== false && (item.stock ?? 0) > 0) });
-      persistProducts(products.map(entry => entry.id === item.id ? response.data : entry));
-    } catch (error) {
-      setNotice('Availability could not be updated.');
-    }
-  };
-
-  const deleteProduct = async id => {
-    if (!window.confirm('Delete this product from the shopping page?')) return;
-    try {
-      await axios.delete(`${API_BASE_URL}/api/products/${id}`);
-      persistProducts(products.filter(entry => entry.id !== id));
-      setNotice('Product deleted successfully.');
-    } catch (error) {
-      setNotice('Product could not be deleted.');
-    }
-  };
-
   const loadBookings = async () => {
     setShowBookings(true);
     setBookingError('');
