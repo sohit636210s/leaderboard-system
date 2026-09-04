@@ -105,6 +105,27 @@ exports.updateWorker = async (req, res) => {
   }
 };
 
+// Upload worker profile photo after signup
+exports.uploadWorkerPhoto = async (req, res) => {
+  try {
+    if (!req.file?.filename) {
+      return res.status(400).json({ error: 'Please select a profile photo' });
+    }
+
+    const updated = await Worker.findByIdAndUpdate(
+      req.params.id,
+      { photo: req.file.filename },
+      { new: true }
+    ).select('-password');
+
+    if (!updated) return res.status(404).json({ error: 'Worker not found' });
+    res.json({ message: 'Profile photo uploaded successfully', worker: updated });
+  } catch (error) {
+    console.error('❌ Photo upload failed:', error.message);
+    res.status(500).json({ error: 'Photo upload failed', details: error.message });
+  }
+};
+
 // 🎯 Toggle availability
 exports.toggleAvailability = async (req, res) => {
   try {

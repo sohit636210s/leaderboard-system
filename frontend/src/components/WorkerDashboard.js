@@ -1,6 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import API_BASE_URL from '../api';
 
 function WorkerDashboard({ worker }) {
+  const [currentWorker, setCurrentWorker] = useState(worker);
+  const [photoMessage, setPhotoMessage] = useState('');
+
+  const handlePhotoUpload = async (event) => {
+    const photo = event.target.files[0];
+    if (!photo || !currentWorker?._id) return;
+    const payload = new FormData();
+    payload.append('photo', photo);
+    try {
+      const response = await axios.put(`${API_BASE_URL}/api/workers/photo/${currentWorker._id}`, payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('workerToken')}` }
+      });
+      setCurrentWorker(response.data.worker);
+      setPhotoMessage('Profile photo uploaded successfully.');
+    } catch (error) {
+      setPhotoMessage(error.response?.data?.error || 'Photo upload failed.');
+    }
+  };
+
   if (!worker) {
     return (
       <div className="text-center mt-5">
@@ -22,7 +43,7 @@ function WorkerDashboard({ worker }) {
     }}>
       <div className="text-center mb-4">
         <img
-          src={worker.profilePhoto || 'https://via.placeholder.com/100'}
+          src={currentWorker.photo && currentWorker.photo !== 'default.jpg' ? `${API_BASE_URL}/uploads/workers/${currentWorker.photo}` : 'https://via.placeholder.com/100'}
           alt="Worker DP"
           className="rounded-circle mb-3"
           style={{
@@ -32,24 +53,29 @@ function WorkerDashboard({ worker }) {
             objectFit: 'cover',
           }}
         />
-        <h5 className="fw-bold text-success mb-1">{worker.name}</h5>
-        <span className="text-muted">{worker.workType || 'Work type not set'}</span>
+        <h5 className="fw-bold text-success mb-1">{currentWorker.name}</h5>
+        <span className="text-muted">{currentWorker.skill || 'Carpenter'}</span>
+        <label className="btn btn-outline-success btn-sm d-block mt-2">
+          <i className="bi bi-camera me-1"></i> Upload profile photo
+          <input type="file" accept="image/*" onChange={handlePhotoUpload} hidden />
+        </label>
+        {photoMessage && <small className="d-block mt-2 text-success">{photoMessage}</small>}
       </div>
 
       <div className="mb-3">
         <strong>Email:</strong>
-        <div>{worker.email}</div>
+        <div>{currentWorker.email}</div>
       </div>
 
       <div className="mb-3">
         <strong>Mobile:</strong>
-        <div>{worker.mobile || 'Not Provided'}</div>
+        <div>{currentWorker.contact || 'Not Provided'}</div>
       </div>
 
       <div className="mb-3">
         <strong>Availability:</strong>
-        <div className={worker.available ? 'text-success fw-semibold' : 'text-danger fw-semibold'}>
-          {worker.available ? '✅ Available' : '❌ Not Available'}
+        <div className={currentWorker.isAvailable ? 'text-success fw-semibold' : 'text-danger fw-semibold'}>
+          {currentWorker.isAvailable ? '✅ Available' : '❌ Not Available'}
         </div>
       </div>
 

@@ -9,6 +9,7 @@ const {
   registerWorker,
   loginWorker,
   updateWorker,
+  uploadWorkerPhoto,
   getWorkerProfile,
   toggleAvailability
 } = require('../controllers/workerController');
@@ -16,23 +17,20 @@ const {
 // 🔒 Auth Middleware
 const { requireAuth } = require('../middlewares/authMiddleware');
 
-// 📁 Setup multer for photo upload
-const storage = multer.diskStorage({
+const photoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = './uploads/workers';
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
+    const directory = './uploads/workers';
+    if (!fs.existsSync(directory)) fs.mkdirSync(directory, { recursive: true });
+    cb(null, directory);
   },
-  filename: (req, file, cb) => {
-    cb(null, 'worker_' + Date.now() + path.extname(file.originalname));
-  }
+  filename: (req, file, cb) => cb(null, 'worker_' + Date.now() + path.extname(file.originalname))
 });
-const upload = multer({ storage });
+const photoUpload = multer({ storage: photoStorage });
 
 /* -------------------------------------------------- */
 
 // 🔐 Register Worker (Public)
-router.post('/register', upload.single('photo'), registerWorker);
+router.post('/register', registerWorker);
 
 // 🔑 Worker Login (Public)
 router.post('/login', loginWorker);
@@ -42,6 +40,7 @@ router.get('/profile/:id', getWorkerProfile);
 
 // 📝 Update Worker (Protected)
 router.put('/update/:id', requireAuth, updateWorker);
+router.put('/photo/:id', requireAuth, photoUpload.single('photo'), uploadWorkerPhoto);
 
 // 🎯 Toggle Availability (Protected)
 router.put('/toggle-availability/:id', requireAuth, toggleAvailability);

@@ -8,6 +8,7 @@ dotenv.config();
 
 // 🔓 CORS enable karna (👇 This solves your deployment issue!)
 const cors = require('cors');
+const path = require('path');
 
 // 🚀 Express app initialize karna
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 
 // 📨 JSON request body ko parse karna
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 🛣️ Routes connect karna (Booking, Worker, Customer APIs)
 const bookingRoutes = require('./routes/bookingRoutes');

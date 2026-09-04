@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../api';
 
 function WorkerLogin({ setWorker }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -17,8 +18,7 @@ function WorkerLogin({ setWorker }) {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const backendURL = process.env.REACT_APP_BACKEND_URL;
-      const res = await axios.post(`${backendURL}/api/workers/login`, formData);
+      const res = await axios.post(`${API_BASE_URL}/api/workers/login`, formData);
       
       localStorage.setItem('workerToken', res.data.token);
       setWorker(res.data.worker);
