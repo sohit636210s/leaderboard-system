@@ -19,7 +19,7 @@ function HomePage() {
         <section className="dashboard-intro">
           <div>
             <p className="dashboard-kicker"><span className="live-dot"></span> FKW WORKSPACE / PATNA</p>
-            <h1>Good morning, <span>let's build.</span></h1>
+            <h1>Let's build <span>something beautiful.</span></h1>
             <p className="dashboard-subtitle">Track your space transformation and find the right craft for your next project.</p>
           </div>
           <button className="dashboard-primary" type="button" onClick={() => openEstimate()}><i className="bi bi-plus-lg"></i> Start a project</button>
