@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import BookingForm from './BookingForm';
 
 function HomePage() {
@@ -70,7 +71,7 @@ function HomePage() {
         </div>
       )}
 
-      <footer className="dashboard-footer">Furniture kaamwallah.in <span>•</span> Patna, Bihar <span>•</span> <small>© {new Date().getFullYear()}</small></footer>
+      <footer className="dashboard-footer official-footer"><div className="official-footer-brand">Furniture Kaam Wallah <small>Custom furniture, wardrobes, kitchens and UPVC interiors.</small></div><nav><Link to="/">Home</Link><Link to="/about">About Us</Link><Link to="/shopping">Shopping</Link><Link to="/contact">Contact</Link><Link to="/booking">Book Furniture Work</Link><a href="tel:63621074008">Call 63621074008</a></nav><div className="official-footer-bottom">Patna, Bihar <span>•</span> Available 24 hours <span>•</span> <small>© {new Date().getFullYear()} Furniture Kaam Wallah</small></div></footer>
     </div>
   );
 }

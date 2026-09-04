@@ -39,40 +39,26 @@ function Navbar({ worker, handleLogout }) {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/booking" onClick={closeMenu}>
-              <i className="bi bi-calendar-check-fill me-1 text-warning"></i>Booking
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link className="nav-link" to="/contact" onClick={closeMenu}>
               <i className="bi bi-telephone-fill me-1 text-success"></i>Contact Us
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/admin/bookings" onClick={closeMenu}>
-              <i className="bi bi-journal-text me-1 text-primary"></i>All Bookings
+            <Link className="nav-link" to="/shopping" onClick={closeMenu}>
+              <i className="bi bi-shop me-1 text-warning"></i>Shopping
             </Link>
           </li>
         </ul>
         <ul className="mobile-nav-links">
           <li><Link to="/" onClick={closeMenu}><i className="bi bi-house-door-fill"></i>Home</Link></li>
           <li><Link to="/about" onClick={closeMenu}><i className="bi bi-info-circle-fill"></i>About Us</Link></li>
-          <li><Link to="/booking" onClick={closeMenu}><i className="bi bi-calendar-check-fill"></i>Booking</Link></li>
           <li><Link to="/contact" onClick={closeMenu}><i className="bi bi-telephone-fill"></i>Contact Us</Link></li>
-          <li><Link to="/admin/bookings" onClick={closeMenu}><i className="bi bi-journal-text"></i>All Bookings</Link></li>
           <li><Link to="/shopping" onClick={closeMenu}><i className="bi bi-bag-heart-fill"></i>Furniture Shopping</Link></li>
-          <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-bag-heart-fill"></i>Shop Furniture</Link></li>
-          <li><Link to="/#upvc-services" onClick={closeMenu}><i className="bi bi-grid-3x3-gap-fill"></i>UPVC Modern Kitchen</Link></li>
-          <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-moon-stars-fill"></i>Luxury Bedroom</Link></li>
-          <li><Link to="/#categories" onClick={closeMenu}><i className="bi bi-box-seam-fill"></i>Cupboards</Link></li>
           <li><Link to="/login" onClick={closeMenu}><i className="bi bi-person-circle"></i>Login / Sign In</Link></li>
           <li><Link to="/signup" onClick={closeMenu}><i className="bi bi-person-plus-fill"></i>Signup</Link></li>
         </ul>
 
         <div className="d-flex align-items-center navbar-actions">
-          <a href="/#categories" className="btn btn-warning fw-bold shop-cta desktop-action me-2" onClick={closeMenu}>
-            <i className="bi bi-bag-heart me-1"></i>Shop Furniture
-          </a>
           <Link to="/shopping" className="btn btn-outline-warning desktop-action me-2" onClick={closeMenu}>
             <i className="bi bi-shop me-1"></i>Shopping
           </Link>
@@ -107,8 +93,6 @@ function Navbar({ worker, handleLogout }) {
             </>
           )}
         </div>
-        <Link to="/booking" className="desktop-quote btn btn-warning" onClick={closeMenu}><i className="bi bi-lightning-charge-fill me-2"></i>Get Free Quote</Link>
-        <Link to="/booking" className="drawer-quote btn btn-warning" onClick={closeMenu}><i className="bi bi-lightning-charge-fill me-2"></i>Get Free Quote</Link>
       </div>
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close navigation menu" onClick={closeMenu}></button>}
     </nav>

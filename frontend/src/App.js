@@ -25,6 +25,7 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdminPage = location.pathname === '/admin';
+  const isShoppingPage = location.pathname === '/shopping';
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -44,7 +45,7 @@ function AppContent() {
 
   return (
     <>
-      {!isAdminPage && <Navbar
+      {!isAdminPage && !isShoppingPage && <Navbar
         worker={worker}
         handleLogout={handleLogout}
         isLoggedIn={isLoggedIn}
@@ -52,7 +53,7 @@ function AppContent() {
       />}
 
       {/* Login Modal */}
-      {!isAdminPage && showLoginModal && (
+      {!isAdminPage && !isShoppingPage && showLoginModal && (
         <div className="modal d-block" tabIndex="-1" style={{ background: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -68,7 +69,7 @@ function AppContent() {
         </div>
       )}
 
-      <div className="app-content-offset">
+      <div className={isAdminPage || isShoppingPage ? '' : 'app-content-offset'}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shopping" element={<ShoppingPage />} />
