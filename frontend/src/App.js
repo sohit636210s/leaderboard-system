@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './components/HomePage';
-import LoginPage from './components/LoginPage';
 import ContactPage from './components/ContactPage';
 import AboutPage from './components/AboutPage';
 import BookingForm from './components/BookingForm';
@@ -58,7 +57,7 @@ function AppContent() {
                 <button type="button" className="btn-close" onClick={() => setShowLoginModal(false)}></button>
               </div>
               <div className="modal-body">
-                <LoginPage setIsLoggedIn={setIsLoggedIn} />
+                <WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />
               </div>
             </div>
           </div>
@@ -81,7 +80,7 @@ function AppContent() {
             element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route path="/customer-login" element={<CustomerLogin setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/login" element={<WorkerLogin setWorker={setWorker} setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/worker-dashboard" element={<WorkerDashboard worker={worker} />} /> {/* ✅ Added route */}
         </Routes>
       </div>

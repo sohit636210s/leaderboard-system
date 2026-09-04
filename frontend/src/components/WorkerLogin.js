@@ -23,7 +23,7 @@ function WorkerLogin({ setWorker }) {
       localStorage.setItem('workerToken', res.data.token);
       setWorker(res.data.worker);
       setErrorMsg('');
-      navigate('/'); // ✅ Redirect to HomePage
+      navigate('/');
 
     } catch (err) {
       const msg = err.response?.data?.error || 'Login failed. Please check your email and password.';
