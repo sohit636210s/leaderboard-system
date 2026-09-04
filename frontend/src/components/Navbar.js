@@ -25,7 +25,7 @@ function Navbar({ worker, handleLogout }) {
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className={`navbar-collapse nav-shell ${menuOpen ? 'menu-open' : ''}`} id="navMenu">
+      <div className={`nav-shell ${menuOpen ? 'menu-open' : ''}`} id="navMenu">
         <button className="drawer-close" type="button" aria-label="Close navigation menu" onClick={closeMenu}><i className="bi bi-x-lg"></i></button>
         <ul className="navbar-nav desktop-nav-list">
           <li className="nav-item">

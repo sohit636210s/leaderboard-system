@@ -13,8 +13,9 @@ body {
 .drawer-close, .drawer-quote, .drawer-backdrop { display: none; }
 .mobile-nav-links { display: none; }
 @media (min-width: 992px) {
-  .site-navbar { flex-wrap: nowrap; height: 58px; }
-  .site-navbar .nav-shell { flex: 1 1 auto; flex-basis: auto; width: auto; flex-direction: row; }
+  .site-navbar { display: flex !important; flex-wrap: nowrap !important; flex-direction: row !important; align-items: center !important; height: 58px; }
+  .site-navbar .nav-shell { display: flex !important; flex: 1 1 auto !important; flex-basis: auto !important; width: auto !important; flex-direction: row !important; align-items: center !important; }
+  .site-navbar .desktop-nav-list { display: flex !important; flex-direction: row !important; align-items: center !important; }
   .site-navbar .drawer-quote { display: none !important; }
 }
 .hero-section { background: radial-gradient(circle at 80% 20%, #e5efdf 0, #f7f4ef 42%); padding-top: 2rem; }
