@@ -26,7 +26,7 @@ function ShoppingPage() {
     const matchesCategory = activeCategory === 'All' || product.category === activeCategory;
     const searchText = `${product.name} ${product.category} ${product.description}`.toLowerCase();
     return matchesCategory && searchText.includes(search.toLowerCase());
-  }), [activeCategory, search, products]);
+  }), [activeCategory, search, publishedProducts]);
 
   const addToCart = product => {
     setCart(previous => {
