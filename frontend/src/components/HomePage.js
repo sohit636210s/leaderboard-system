@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './HomePage.css';
 
 const WORK_HIGHLIGHTS = [
   { title: 'Carpenter work near Patna', text: 'Wardrobe fitting and custom furniture in progress.', image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=240&q=80' },
