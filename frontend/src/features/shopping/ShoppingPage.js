@@ -31,7 +31,7 @@ function ShoppingPage() {
   const promotions = [
     { title: 'Fresh furniture for every room', text: 'Beds, chairs, tables and custom home furniture.' },
     { title: 'UPVC furniture, made for India', text: 'Low-maintenance cupboards and kitchen units.' },
-    { title: 'Need a custom size?', text: 'Call 63621074008 for 24-hour support.' }
+    { title: 'Need a custom size?', text: 'Call 6362107408 for 24-hour support.' }
   ];
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function ShoppingPage() {
     const description = document.querySelector('meta[name="description"]');
     const originalDescription = description?.getAttribute('content');
     document.title = 'Furniture Shopping India | Beds, Tables, Chairs & UPVC Furniture | Kaam Wallah';
-    description?.setAttribute('content', 'Shop ready-made beds, palang, chairs, tables, bedroom furniture, kitchen units and UPVC cupboards from Furniture Kaam Wallah. Call 63621074008 for custom furniture work.');
+    description?.setAttribute('content', 'Shop ready-made beds, palang, chairs, tables, bedroom furniture, kitchen units and UPVC cupboards from Furniture Kaam Wallah. Call 6362107408 for custom furniture work.');
 
     return () => {
       document.title = originalTitle;
@@ -94,8 +94,8 @@ function ShoppingPage() {
       return;
     }
     setAvailabilityMessage(buyProduct && buyProduct.available !== false && (buyProduct.stock ?? 0) > 0
-      ? `Available near pincode ${deliveryDetails.pincode}. We will contact you at 63621074008 to confirm the order.`
-      : 'This product is currently out of stock. Please call 63621074008 for alternatives.');
+      ? `Available near pincode ${deliveryDetails.pincode}. We will contact you at 6362107408 to confirm the order.`
+      : 'This product is currently out of stock. Please call 6362107408 for alternatives.');
   };
 
   return (
@@ -116,7 +116,7 @@ function ShoppingPage() {
               <h1>Furniture that fits <span>your everyday.</span></h1>
               <p>Ready-made beds, chairs, tables, UPVC cupboards and kitchen furniture, selected for your home.</p>
             </div>
-            <div className="shopping-support"><i className="bi bi-headset"></i><span>Need a custom size?<strong>Call 63621074008</strong></span></div>
+            <div className="shopping-support"><i className="bi bi-headset"></i><span>Need a custom size?<strong>Call 6362107408</strong></span></div>
           </div>
           <div className="shopping-search-wrap shopping-search-summary"><i className="bi bi-search"></i><span>{search || 'Search our furniture collection'}</span><button type="button" onClick={() => setSearchOpen(true)}>Search</button></div>
         </div>
@@ -131,7 +131,7 @@ function ShoppingPage() {
       </section>
 
       {cartOpen && <div className="cart-backdrop" onClick={() => setCartOpen(false)}></div>}
-      <aside className={`cart-drawer ${cartOpen ? 'open' : ''}`} aria-label="Shopping cart"><div className="cart-heading"><div><p>YOUR CART</p><h2>Ready to order?</h2></div><button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart"><i className="bi bi-x-lg"></i></button></div>{cart.length === 0 ? <div className="cart-empty"><i className="bi bi-bag"></i><p>Your cart is empty.</p><span>Add a piece you love to get started.</span></div> : <><div className="cart-items">{cart.map(item => <div className="cart-item" key={item.id}><img src={item.image} alt="" /><div><strong>{item.name}</strong><span>{formatPrice(item.price)}</span><div className="quantity"><button type="button" onClick={() => changeQuantity(item.id, -1)}>-</button><b>{item.quantity}</b><button type="button" onClick={() => changeQuantity(item.id, 1)}>+</button></div></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{formatPrice(cartTotal)}</strong></div><a href="tel:63621074008" className="cart-order"><i className="bi bi-telephone"></i> Call to order</a></>}</aside>
+      <aside className={`cart-drawer ${cartOpen ? 'open' : ''}`} aria-label="Shopping cart"><div className="cart-heading"><div><p>YOUR CART</p><h2>Ready to order?</h2></div><button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart"><i className="bi bi-x-lg"></i></button></div>{cart.length === 0 ? <div className="cart-empty"><i className="bi bi-bag"></i><p>Your cart is empty.</p><span>Add a piece you love to get started.</span></div> : <><div className="cart-items">{cart.map(item => <div className="cart-item" key={item.id}><img src={item.image} alt="" /><div><strong>{item.name}</strong><span>{formatPrice(item.price)}</span><div className="quantity"><button type="button" onClick={() => changeQuantity(item.id, -1)}>-</button><b>{item.quantity}</b><button type="button" onClick={() => changeQuantity(item.id, 1)}>+</button></div></div></div>)}</div><div className="cart-total"><span>Total</span><strong>{formatPrice(cartTotal)}</strong></div><a href="tel:6362107408" className="cart-order"><i className="bi bi-telephone"></i> Call to order</a></>}</aside>
       {buyProduct && <div className="buy-modal-backdrop" onClick={() => setBuyProduct(null)}><section className="buy-modal" onClick={event => event.stopPropagation()}><button type="button" className="buy-modal-close" onClick={() => setBuyProduct(null)} aria-label="Close"><i className="bi bi-x-lg"></i></button><p className="shopping-kicker">CHECK DELIVERY AVAILABILITY</p><h2>{buyProduct.name}</h2><p>Enter your delivery details and we will confirm availability near you.</p><form onSubmit={checkAvailability}><label>Address<textarea value={deliveryDetails.address} onChange={event => setDeliveryDetails({ ...deliveryDetails, address: event.target.value })} rows="3" placeholder="House, street and city" required /></label><label>Pincode<input value={deliveryDetails.pincode} onChange={event => setDeliveryDetails({ ...deliveryDetails, pincode: event.target.value })} inputMode="numeric" maxLength="6" placeholder="6-digit pincode" required /></label><button className="admin-primary" type="submit"><i className="bi bi-geo-alt"></i> Check availability</button></form>{availabilityMessage && <div className="availability-message">{availabilityMessage}</div>}</section></div>}
     </main>
   );
