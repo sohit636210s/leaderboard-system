@@ -1,0 +1,482 @@
+.dashboard-page {
+  min-height: calc(100vh - 70px);
+  background:
+    radial-gradient(ellipse at 92% 4%, #e8f4e9 0, transparent 34rem),
+    #f5f7f5;
+  color: #17211c;
+}
+
+.dashboard-shell {
+  width: min(1200px, calc(100% - 48px));
+  padding: clamp(1.5rem, 4vw, 3.25rem) 0 2.25rem;
+}
+
+.dashboard-intro {
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid #dce8df;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #fff 0%, #fbfdfb 62%, #eef8f0 100%);
+  box-shadow: 0 14px 40px #17211c0a;
+}
+
+.dashboard-kicker,
+.panel-label {
+  letter-spacing: .14em;
+}
+
+.dashboard-intro h1 {
+  max-width: 720px;
+  font-size: clamp(2.3rem, 5vw, 4.15rem);
+  letter-spacing: -.045em;
+}
+
+.dashboard-intro h1 span {
+  color: #198b43;
+}
+
+.dashboard-subtitle {
+  max-width: 570px;
+  margin-top: 1rem;
+  font-size: clamp(.92rem, 1.5vw, 1.02rem);
+  line-height: 1.7;
+}
+
+.dashboard-primary {
+  min-height: 48px;
+  padding: .8rem 1.15rem;
+  border-radius: 7px;
+  background: #198b43;
+  box-shadow: 0 8px 18px #198b4326;
+  white-space: nowrap;
+}
+
+.dashboard-primary:hover {
+  background: #126b33;
+}
+
+.official-work-spotlight {
+  min-height: 82px;
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: .65rem .85rem;
+  border: 1px solid #e3e9e5;
+  border-left: 4px solid #198b43;
+  border-right: 1px solid #e3e9e5;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px #17211c08;
+}
+
+.official-work-spotlight img {
+  width: 92px;
+  height: 62px;
+  border: 0;
+  border-radius: 8px;
+}
+
+.official-work-spotlight strong {
+  font-size: .96rem;
+}
+
+.official-work-spotlight div:nth-child(2) > span {
+  margin-top: .2rem;
+  font-size: .75rem;
+}
+
+.spotlight-dots i {
+  width: 7px;
+  height: 7px;
+}
+
+.metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.metric-card {
+  min-width: 0;
+  min-height: 166px;
+  padding: 1.2rem;
+  border: 1px solid #e2e9e4;
+  border-radius: 13px;
+  box-shadow: 0 8px 24px #17211c08;
+}
+
+.metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.metric-card p {
+  font-size: .8rem;
+}
+
+.metric-card strong {
+  font-size: 2rem;
+}
+
+.metric-callout {
+  background: #172b20;
+  border-color: #172b20;
+}
+
+.metric-callout strong {
+  max-width: 165px;
+}
+
+.metric-callout button {
+  color: #83e09b;
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.workspace-panel {
+  min-width: 0;
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  border: 1px solid #e2e9e4;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px #17211c08;
+}
+
+.panel-heading h2 {
+  font-size: 1.45rem;
+}
+
+.progress-panel {
+  min-height: 290px;
+}
+
+.progress-ring {
+  flex-basis: 116px;
+  height: 116px;
+  background:
+    radial-gradient(closest-side, #fff 78%, transparent 79% 100%),
+    conic-gradient(#198b43 68%, #e7eee9 0);
+}
+
+.milestones {
+  gap: .75rem;
+}
+
+.milestone {
+  font-size: .68rem;
+}
+
+.craft-item {
+  min-height: 56px;
+}
+
+.craft-item:focus-visible,
+.panel-link:focus-visible,
+.dashboard-primary:focus-visible,
+.metric-callout button:focus-visible,
+.icon-button:focus-visible {
+  outline: 3px solid #198b4380;
+  outline-offset: 3px;
+}
+
+.jobs-panel {
+  grid-column: auto;
+}
+
+.job-row {
+  grid-template-columns: 52px minmax(0, 1fr) auto 14px;
+  gap: .8rem;
+  min-height: 74px;
+}
+
+.job-thumb {
+  width: 52px;
+  height: 46px;
+  border-radius: 7px;
+}
+
+.job-detail {
+  min-width: 0;
+}
+
+.job-detail span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-status {
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.next-panel {
+  border-color: #bd2929;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #cf2929, #a91e24);
+  box-shadow: 0 12px 28px #a91e2424;
+}
+
+.next-content {
+  max-width: 320px;
+}
+
+.next-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: #a91e24;
+}
+
+.next-panel h2 {
+  font-size: 1.8rem;
+}
+
+.next-panel .dashboard-primary {
+  background: #fff;
+  color: #a91e24;
+}
+
+.official-footer {
+  margin-top: .25rem;
+  padding: 1.75rem 1rem 1.5rem;
+  background: #172b20;
+}
+
+.official-footer nav a {
+  padding: .35rem .15rem;
+}
+
+@media (max-width: 900px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric-callout {
+    grid-column: span 2;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-shell {
+    width: min(100% - 28px, 560px);
+    padding-top: 1.25rem;
+  }
+
+  .dashboard-intro {
+    padding: 1.4rem;
+    border-radius: 15px;
+  }
+
+  .dashboard-intro h1 {
+    font-size: clamp(2.25rem, 10vw, 3.25rem);
+  }
+
+  .dashboard-intro .dashboard-primary {
+    margin-top: 1rem;
+  }
+
+  .official-work-spotlight {
+    align-items: flex-start;
+    gap: .7rem;
+    min-height: 80px;
+    padding: .65rem;
+  }
+
+  .official-work-spotlight img {
+    width: 66px;
+    height: 58px;
+  }
+
+  .official-work-spotlight p {
+    font-size: .52rem;
+    letter-spacing: .07em;
+  }
+
+  .official-work-spotlight strong {
+    font-size: .82rem;
+  }
+
+  .official-work-spotlight div:nth-child(2) > span {
+    max-width: 100%;
+    font-size: .65rem;
+  }
+
+  .spotlight-dots {
+    gap: .2rem;
+  }
+
+  .metric-grid {
+    gap: 9px;
+    margin-bottom: 9px;
+  }
+
+  .metric-card {
+    min-height: 150px;
+    padding: .9rem;
+    border-radius: 11px;
+  }
+
+  .metric-card strong {
+    font-size: 1.7rem;
+  }
+
+  .metric-card p {
+    font-size: .72rem;
+  }
+
+  .metric-up,
+  .metric-neutral {
+    font-size: .64rem;
+  }
+
+  .metric-callout {
+    min-height: 130px;
+  }
+
+  .metric-callout strong {
+    max-width: 190px;
+    font-size: 1.05rem;
+  }
+
+  .metric-callout button {
+    right: .9rem;
+    bottom: .9rem;
+  }
+
+  .dashboard-grid {
+    gap: 10px;
+  }
+
+  .workspace-panel {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .progress-panel {
+    min-height: auto;
+  }
+
+  .progress-visual {
+    gap: .85rem;
+    margin: 1.3rem 0 1.1rem;
+  }
+
+  .progress-ring {
+    flex-basis: 88px;
+    height: 88px;
+  }
+
+  .progress-copy {
+    min-width: 0;
+    font-size: .72rem;
+  }
+
+  .milestones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem .5rem;
+  }
+
+  .milestone {
+    flex-direction: row;
+    align-items: center;
+    gap: .4rem;
+    font-size: .65rem;
+  }
+
+  .job-row {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: .55rem;
+    min-height: 68px;
+  }
+
+  .job-thumb {
+    width: 42px;
+    height: 40px;
+  }
+
+  .job-detail strong {
+    font-size: .75rem;
+  }
+
+  .job-detail span {
+    font-size: .61rem;
+  }
+
+  .job-status {
+    padding: .3rem .4rem;
+    font-size: .56rem;
+  }
+
+  .job-row > i {
+    display: none;
+  }
+
+  .next-content {
+    max-width: none;
+  }
+
+  .official-footer nav {
+    gap: .35rem 1rem;
+  }
+
+  .official-footer-bottom small {
+    display: block;
+    margin-top: .45rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .dashboard-shell {
+    width: calc(100% - 20px);
+  }
+
+  .dashboard-intro {
+    padding: 1.15rem;
+  }
+
+  .official-work-spotlight img {
+    width: 52px;
+  }
+
+  .spotlight-dots {
+    display: none;
+  }
+
+  .metric-card {
+    padding: .75rem;
+  }
+
+  .metric-card strong {
+    font-size: 1.5rem;
+  }
+
+  .metric-callout button {
+    position: static;
+    display: block;
+    margin-top: .7rem;
+  }
+
+  .job-status {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-primary,
+  .craft-item {
+    transition: none;
+  }
+
+  .dashboard-primary:hover {
+    transform: none;
+  }
+}
