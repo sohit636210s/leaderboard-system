@@ -63,7 +63,7 @@ const createBooking = async (req, res) => {
 // 🗂 Admin: List all bookings with worker details
 const listBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate('matchedWorker');
+    const bookings = await Booking.find().sort({ createdAt: -1, _id: -1 }).populate('matchedWorker');
     res.json(bookings);
   } catch (error) {
     console.error('❌ Fetch error:', error.message);
@@ -71,4 +71,25 @@ const listBookings = async (req, res) => {
   }
 };
 
-module.exports = { createBooking, listBookings };
+const deleteBooking = async (req, res) => {
+  try {
+    if (require('mongoose').connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database is not connected. Please try again in a moment.' });
+    }
+
+    const booking = await Booking.findByIdAndDelete(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found.' });
+    }
+
+    res.json({ message: 'Booking deleted successfully.' });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid booking ID.' });
+    }
+    console.error('❌ Booking deletion error:', error.message);
+    res.status(500).json({ error: 'Booking could not be deleted. Please try again.' });
+  }
+};
+
+module.exports = { createBooking, listBookings, deleteBooking };
