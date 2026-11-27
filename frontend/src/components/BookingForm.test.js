@@ -66,10 +66,14 @@ describe('BookingForm current location', () => {
     fireEvent.change(screen.getByPlaceholderText('Your full name'), { target: { value: 'Test Customer' } });
     fireEvent.change(screen.getByPlaceholderText('10-digit mobile number'), { target: { value: '9876543210' } });
     fireEvent.change(screen.getByPlaceholderText('Wardrobe, kitchen, bedroom, hall or UPVC work'), { target: { value: 'Kitchen work' } });
-    fireEvent.click(screen.getByRole('button', { name: /use my current location/i }));
+    const locationInput = screen.getByLabelText('Address and pincode');
+    fireEvent.click(locationInput);
 
     await screen.findByText('Current location detected.');
-    expect(screen.getByText(/Pincode 800024/)).toBeInTheDocument();
+    expect(locationInput).toHaveValue('Baba Chowk, Patna, Bihar, 800024, India\nPincode: 800024');
+    fireEvent.change(locationInput, {
+      target: { value: 'Edited street, Patna, Bihar\nPincode: 800025' }
+    });
 
     fireEvent.click(screen.getByRole('button', { name: /submit booking request/i }));
 
@@ -77,8 +81,8 @@ describe('BookingForm current location', () => {
       expect(axios.post).toHaveBeenCalledWith(`${API_BASE_URL}/api/bookings/book`, {
         customerName: 'Test Customer',
         contact: '9876543210',
-        address: 'Baba Chowk, Patna, Bihar, 800024, India',
-        pincode: '800024',
+        address: 'Edited street, Patna, Bihar',
+        pincode: '800025',
         jobDescription: 'Kitchen work'
       });
     });

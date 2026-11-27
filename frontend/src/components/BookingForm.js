@@ -13,8 +13,21 @@ function BookingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [locationMessage, setLocationMessage] = useState('');
+  const [locationText, setLocationText] = useState('');
 
   const handleChange = event => setFormData(previous => ({ ...previous, [event.target.name]: event.target.value }));
+
+  const handleLocationTextChange = event => {
+    const value = event.target.value;
+    const lines = value.split(/\r?\n/);
+    const lastLine = lines[lines.length - 1].trim();
+    const postcode = lastLine.match(/^(?:pincode|pin code)\s*:\s*([1-9]\d{5})$/i)?.[1] || '';
+    const address = (postcode ? lines.slice(0, -1).join('\n') : value).trim();
+
+    setLocationText(value);
+    setFormData(previous => ({ ...previous, address, pincode: postcode }));
+    setLocationMessage('');
+  };
 
   const handleFetchLocation = () => {
     if (!navigator.geolocation) {
@@ -24,6 +37,7 @@ function BookingForm() {
 
     setIsLocating(true);
     setLocationMessage('');
+    setLocationText('');
     setFormData(previous => ({ ...previous, address: '', pincode: '' }));
 
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
@@ -52,6 +66,7 @@ function BookingForm() {
         }
 
         setFormData(previous => ({ ...previous, address, pincode: postcode }));
+        setLocationText(`${address}\nPincode: ${postcode}`);
         setLocationMessage('Current location detected.');
       } catch (error) {
         console.error('Could not look up the current location:', error);
@@ -73,7 +88,7 @@ function BookingForm() {
   const handleSubmit = async event => {
     event.preventDefault();
     if (!formData.address || !/^[1-9]\d{5}$/.test(formData.pincode)) {
-      setLocationMessage('Fetch your current location before submitting the booking request.');
+      setLocationMessage('Enter an address and valid 6-digit pincode in the location box before submitting.');
       return;
     }
 
@@ -109,13 +124,15 @@ function BookingForm() {
               <div className="booking-form-grid"><label>Name<input className="booking-input" name="customerName" value={formData.customerName} onChange={handleChange} placeholder="Your full name" required /></label><label>Phone<input className="booking-input" name="contact" value={formData.contact} onChange={handleChange} inputMode="tel" placeholder="10-digit mobile number" required /></label></div>
               <div className="booking-location-field">
                 <label htmlFor="booking-location">Address and pincode</label>
-                <button id="booking-location" className="booking-input booking-location-button" type="button" onClick={handleFetchLocation} disabled={isLocating || isSubmitting} aria-label={isLocating ? 'Fetching your current location' : formData.address ? 'Update current location' : 'Use my current location'} aria-describedby="booking-location-attribution">
-                  <i className={`bi ${isLocating ? 'bi-arrow-repeat' : 'bi-geo-alt'} me-2`}></i>
-                  {isLocating ? 'Fetching your current location...' : formData.address ? 'Update current location' : 'Use my current location'}
-                </button>
-                {formData.address && <span className="booking-location-summary">Detected location: {formData.address} · Pincode {formData.pincode}</span>}
+                <div className="booking-location-control">
+                  <textarea id="booking-location" className="booking-input booking-location-input" value={locationText} onChange={handleLocationTextChange} onClick={() => { if (!locationText.trim() && !locationMessage) handleFetchLocation(); }} placeholder="Click here to fetch your current location" rows="2" disabled={isLocating || isSubmitting} aria-describedby="booking-location-attribution booking-location-message" />
+                  <button type="button" className="booking-location-action" onClick={handleFetchLocation} disabled={isLocating || isSubmitting} aria-label={isLocating ? 'Fetching your current location' : formData.address ? 'Update current location' : 'Fetch current location'}>
+                    <i className={`bi ${isLocating ? 'bi-arrow-repeat' : 'bi-geo-alt'}`}></i>
+                  </button>
+                </div>
+                {isLocating && <span id="booking-location-message" className="booking-location-message" role="status">Fetching your current location...</span>}
                 <span id="booking-location-attribution" className="booking-location-attribution">Location lookup by <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></span>
-                {locationMessage && <span id="booking-location-message" className="booking-location-message" role="status">{locationMessage}</span>}
+                {locationMessage && <span id="booking-location-message" className={`booking-location-message ${locationMessage === 'Current location detected.' ? 'success' : ''}`} role="status">{locationMessage}</span>}
               </div>
               <label>Tell us about the work<textarea className="booking-input" name="jobDescription" value={formData.jobDescription} onChange={handleChange} placeholder="Wardrobe, kitchen, bedroom, hall or UPVC work" rows="4" required /></label>
               <button className="booking-submit" disabled={isSubmitting || isLocating}><i className="bi bi-send-check me-2"></i>{isSubmitting ? 'Submitting request...' : 'Submit booking request'}</button>
