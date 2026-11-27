@@ -18,6 +18,18 @@ function loadProducts() {
   }
 }
 
+const sortBookingsNewestFirst = items => [...items].sort((first, second) => {
+  const dateDifference = (Date.parse(second.createdAt || '') || 0) - (Date.parse(first.createdAt || '') || 0);
+  return dateDifference || String(second._id || '').localeCompare(String(first._id || ''));
+});
+
+const csvCell = value => {
+  const text = String(value ?? '');
+  const firstNonWhitespace = text.trimStart().charAt(0);
+  const safeText = firstNonWhitespace && '=+-@'.includes(firstNonWhitespace) ? `'${text}` : text;
+  return `"${safeText.replace(/"/g, '""')}"`;
+};
+
 function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem(ADMIN_KEY) === 'true');
   const [selectedModule, setSelectedModule] = useState(() => sessionStorage.getItem('kaamwallah_admin_module') || (sessionStorage.getItem(ADMIN_KEY) === 'true' ? 'shopping' : ''));
@@ -29,6 +41,9 @@ function AdminPage() {
   const [showBookings, setShowBookings] = useState(false);
   const [notice, setNotice] = useState('');
   const [bookingError, setBookingError] = useState('');
+  const [bookingNotice, setBookingNotice] = useState('');
+  const [isLoadingBookings, setIsLoadingBookings] = useState(false);
+  const [deletingBookingId, setDeletingBookingId] = useState('');
 
   useEffect(() => {
     document.body.classList.toggle('admin-shopping-mode', selectedModule === 'shopping' && loggedIn);
@@ -79,10 +94,7 @@ function AdminPage() {
     sessionStorage.setItem('kaamwallah_admin_module', selectedModule);
     setLoggedIn(true);
     if (selectedModule === 'bookings') {
-      setShowBookings(true);
-      axios.get(`${API_BASE_URL}/api/bookings/list`)
-        .then(response => setBookings(Array.isArray(response.data) ? response.data : []))
-        .catch(() => setBookingError('Bookings could not be loaded. Please check the backend connection.'));
+      loadBookings();
     }
     setNotice('Welcome to your admin dashboard.');
   };
@@ -118,16 +130,129 @@ function AdminPage() {
   const loadBookings = async () => {
     setShowBookings(true);
     setBookingError('');
+    setBookingNotice('');
+    setIsLoadingBookings(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/bookings/list`);
-      setBookings(Array.isArray(response.data) ? response.data : []);
+      setBookings(Array.isArray(response.data) ? sortBookingsNewestFirst(response.data) : []);
     } catch (error) {
       setBookingError('Bookings could not be loaded. Please check the backend connection.');
+    } finally {
+      setIsLoadingBookings(false);
     }
   };
 
+  const deleteBooking = async booking => {
+    if (!booking._id) {
+      setBookingError('This booking has no database ID and cannot be deleted.');
+      return;
+    }
+    if (!window.confirm(`Delete the booking from ${booking.customerName || 'this customer'}? This cannot be undone.`)) {
+      return;
+    }
+
+    setDeletingBookingId(booking._id);
+    setBookingError('');
+    setBookingNotice('');
+    try {
+      await axios.delete(`${API_BASE_URL}/api/bookings/${booking._id}`);
+      setBookings(currentBookings => currentBookings.filter(item => item._id !== booking._id));
+      setBookingNotice('Booking deleted successfully.');
+    } catch (error) {
+      setBookingError(error.response?.data?.error || 'Booking could not be deleted. Please try again.');
+    } finally {
+      setDeletingBookingId('');
+    }
+  };
+
+  const downloadBookingHistory = () => {
+    if (!bookings.length) return;
+
+    const headers = [
+      'Booking ID', 'Booked At', 'Last Updated', 'Customer Name', 'Contact',
+      'Address', 'Pincode', 'Job Description', 'Matched Worker ID',
+      'Matched Worker Name', 'Matched Worker Contact', 'Matched Worker City', 'Matched Worker Pincode'
+    ];
+    const rows = bookings.map(booking => {
+      const worker = booking.matchedWorker && typeof booking.matchedWorker === 'object'
+        ? booking.matchedWorker
+        : {};
+      const bookingDate = booking.createdAt ? new Date(booking.createdAt) : null;
+      const updatedDate = booking.updatedAt ? new Date(booking.updatedAt) : null;
+      const bookingId = booking._id || '';
+      const workerId = worker._id || (typeof booking.matchedWorker === 'string' ? booking.matchedWorker : '');
+      return [
+        bookingId,
+        bookingDate && !Number.isNaN(bookingDate.getTime()) ? bookingDate.toISOString() : '',
+        updatedDate && !Number.isNaN(updatedDate.getTime()) ? updatedDate.toISOString() : '',
+        booking.customerName,
+        booking.contact,
+        booking.address,
+        booking.pincode,
+        booking.jobDescription,
+        workerId,
+        worker.name,
+        worker.contact,
+        worker.city,
+        worker.pincode
+      ];
+    });
+    const csv = [headers, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+    const downloadUrl = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `booking-history-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 0);
+  };
+
   if (loggedIn && selectedModule === 'bookings') {
-    return <main className="admin-page admin-booking-only"><div className="admin-container"><header className="admin-topbar"><Link to="/" className="admin-logo"><span><i className="bi bi-hammer"></i></span> Furniture Kaam Wallah <small>BOOKING ADMIN</small></Link><div className="admin-top-actions"><button type="button" className="admin-outline" onClick={() => { sessionStorage.removeItem(ADMIN_KEY); sessionStorage.removeItem('kaamwallah_admin_module'); setLoggedIn(false); setSelectedModule(''); }}>Sign out</button></div></header><section className="admin-welcome"><div><p className="admin-kicker">WORK BOOKING ADMIN</p><h1>Customer bookings.</h1><p>Review every furniture request and the carpenter matched to it.</p></div><button type="button" className="admin-primary admin-bookings-button" onClick={loadBookings}><i className="bi bi-arrow-clockwise"></i> Refresh bookings</button></section>{bookingError && <div className="admin-message error">{bookingError}</div>}<section className="admin-bookings-panel"><div className="admin-panel-title"><div><p className="admin-kicker">CUSTOMER ACTIVITY</p><h2>{bookings.length} booking{bookings.length === 1 ? '' : 's'}</h2></div><Link to="/" className="admin-cancel">Website</Link></div><div className="admin-booking-table">{bookings.length ? bookings.map((booking, index) => <article key={booking._id || index}><div className="booking-number">{String(index + 1).padStart(2, '0')}</div><div><strong>{booking.customerName}</strong><span>{booking.jobDescription}</span></div><div><strong>{booking.contact}</strong><span>{booking.address} · {booking.pincode}</span></div><span className={booking.matchedWorker ? 'booking-status assigned' : 'booking-status'}>{booking.matchedWorker ? `Assigned: ${booking.matchedWorker.name}` : 'Awaiting carpenter'}</span></article>) : <div className="admin-no-bookings"><i className="bi bi-inbox"></i><p>No bookings found yet.</p><button type="button" className="admin-primary" onClick={loadBookings}>Load bookings</button></div>}</div></section></div></main>;
+    return (
+      <main className="admin-page admin-booking-only">
+        <div className="admin-container">
+          <header className="admin-topbar">
+            <Link to="/" className="admin-logo"><span><i className="bi bi-hammer"></i></span> Furniture Kaam Wallah <small>BOOKING ADMIN</small></Link>
+            <div className="admin-top-actions">
+              <button type="button" className="admin-outline" onClick={() => { sessionStorage.removeItem(ADMIN_KEY); sessionStorage.removeItem('kaamwallah_admin_module'); setLoggedIn(false); setSelectedModule(''); }}>Sign out</button>
+            </div>
+          </header>
+          <section className="admin-welcome">
+            <div><p className="admin-kicker">WORK BOOKING ADMIN</p><h1>Customer bookings.</h1><p>Review every furniture request and the carpenter matched to it.</p></div>
+            <button type="button" className="admin-primary admin-bookings-button" onClick={loadBookings} disabled={isLoadingBookings}>
+              <i className="bi bi-arrow-clockwise"></i> {isLoadingBookings ? 'Loading bookings...' : 'Refresh bookings'}
+            </button>
+          </section>
+          {bookingError && <div className="admin-message error" role="alert">{bookingError}</div>}
+          {bookingNotice && <div className="admin-message success" role="status"><i className="bi bi-check-circle"></i>{bookingNotice}</div>}
+          <section className="admin-bookings-panel">
+            <div className="admin-panel-title">
+              <div><p className="admin-kicker">CUSTOMER ACTIVITY</p><h2>{bookings.length} booking{bookings.length === 1 ? '' : 's'}</h2></div>
+              <div className="admin-booking-panel-actions">
+                <button type="button" className="admin-download-button" onClick={downloadBookingHistory} disabled={!bookings.length || isLoadingBookings}>
+                  <i className="bi bi-download"></i> Download history
+                </button>
+                <Link to="/" className="admin-cancel">Website</Link>
+              </div>
+            </div>
+            <div className="admin-booking-table">
+              {isLoadingBookings ? <div className="admin-no-bookings"><p>Loading booking history...</p></div> : bookings.length ? bookings.map((booking, index) => (
+                <article className="admin-history-row" key={booking._id || index}>
+                  <div className="booking-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div><strong>{booking.customerName}</strong><span>{booking.jobDescription}</span></div>
+                  <div><strong>{booking.contact}</strong><span>{booking.address} · {booking.pincode}</span></div>
+                  <span className={booking.matchedWorker ? 'booking-status assigned' : 'booking-status'}>{booking.matchedWorker ? `Assigned: ${booking.matchedWorker.name}` : 'Awaiting carpenter'}</span>
+                  <button type="button" className="admin-booking-delete" onClick={() => deleteBooking(booking)} disabled={Boolean(deletingBookingId)} aria-label={`Delete booking for ${booking.customerName}`}>
+                    <i className="bi bi-trash"></i> {deletingBookingId === booking._id ? 'Deleting...' : 'Delete'}
+                  </button>
+                </article>
+              )) : <div className="admin-no-bookings"><i className="bi bi-inbox"></i><p>{bookingError ? 'Booking history could not be loaded.' : 'No bookings found yet.'}</p>{!bookingError && <button type="button" className="admin-primary" onClick={loadBookings}>Load bookings</button>}</div>}
+            </div>
+          </section>
+        </div>
+      </main>
+    );
   }
 
   if (!loggedIn) {
